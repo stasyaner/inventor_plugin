@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace GuitarNeckBuilder
 {
-    public partial class Form1 : Form
+    public partial class MainViewForm : Form
     {
-        public Form1()
+        public MainViewForm()
         {
             InitializeComponent();
         }
