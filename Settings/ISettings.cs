@@ -4,7 +4,7 @@ namespace Settings
 {
     public interface ISettings
     {
-        void SetSetting(SettingName settingName, int settingValue);
-        int GetSetting(SettingName settingName);
+        void SetSetting(SettingName settingName, double settingValue);
+        double GetSetting(SettingName settingName);
     }
 }

@@ -1,12 +1,14 @@
-﻿using Settings;
-
-namespace Parts
+﻿namespace Parts
 {
     public class FretPart : IPart
     {
-        public void Build(ISettings fretSettings)
+        public void Build()
         {
 
+        }
+
+        public void Close()
+        {
         }
     }
 }

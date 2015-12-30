@@ -2,8 +2,8 @@
 {
     public enum SettingName
     {
-        AtNutWeight,
-        AtLastFretWeight,
+        AtNutWidth,
+        AtLastFretWidth,
         AtNutHeight,
         AtTwelveFretHeight,
         Length,
