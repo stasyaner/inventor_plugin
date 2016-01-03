@@ -31,12 +31,23 @@ namespace Settings
                 }
             }
 
-            //Делим на 10, так как инвентор воспринимает все размеры в см
-            _settingsDictionary[settingName] = settingValue / 10;
+            //Делим на 10, так как инвентор воспринимает все размеры в см, кроме количества ладов
+            if (settingName != SettingName.FretNumber)
+            {
+                _settingsDictionary[settingName] = settingValue / 10;
+            }
+            else
+            {
+                _settingsDictionary[settingName] = settingValue;
+            }
         }
 
         public double GetSetting(SettingName settingName)
         {
+            if (!_settingsDictionary.ContainsKey(settingName))
+            {
+                throw new ArgumentException("Словарь не содержит такого ключа.");
+            }
             return _settingsDictionary[settingName];
         }
     }

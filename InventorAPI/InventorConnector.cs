@@ -51,9 +51,6 @@ namespace InventorAPI
         /// <summary>
         /// ConnectionError свойтво.
         /// </summary>
-        /// <value>
-        /// Содержит сообщение об ошибки при инициализации приложения.
-        /// </value>
         public string ConnectionError;
 
         /// <summary>
@@ -81,6 +78,25 @@ namespace InventorAPI
 
             //возвращаем скетч вызвавшему методу
             return sketch;
+        }
+
+        public void ChangeMaterial(PartDocument partDocument, string materialName)
+        {
+            //Получаем библиотеку
+            Materials materialsLibrary = partDocument.Materials;
+
+            //Берем необходимый материал
+            Material myMaterial = materialsLibrary[materialName];
+
+            //Проверка на то, что материал входит в текущую библиотеку
+            Material tempMaterial = myMaterial.StyleLocation == StyleLocationEnum.kLibraryStyleLocation
+                ? myMaterial.ConvertToLocal()
+                : myMaterial;
+
+            //Меняем материал.
+            partDocument.ComponentDefinition.Material = tempMaterial;
+            //Обновляем документ.
+            partDocument.Update();
         }
 
         public void DrawCircle(double diameter, PlanarSketch sketch, Object centerPoint)

@@ -146,6 +146,22 @@ namespace Parts
             _partDoc.ComponentDefinition.Features.LoftFeatures.Add(skethesLoftDefinition);
 
             #endregion
+
+            //Меняем материал
+                string materialName = @"Maple";
+                switch (Convert.ToByte(_settings.GetSetting(SettingName.Material)))
+                {
+                    case 0:
+                        materialName = @"Mahogany";
+                        break;
+                    case 1:
+                        materialName = @"Maple";
+                        break;
+                    case 2:
+                        materialName = @"Ash";
+                        break;
+                }
+            _invetorConnector.ChangeMaterial(_partDoc, materialName);
         }
 
         /// <summary>

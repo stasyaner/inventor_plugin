@@ -37,6 +37,10 @@ namespace Settings
 
         public double GetSetting(SettingName settingName)
         {
+            if (!_settingsDictionary.ContainsKey(settingName))
+            {
+                throw new ArgumentException("Словарь не содержит такого ключа.");
+            }
             return _settingsDictionary[settingName];
         }
     }
