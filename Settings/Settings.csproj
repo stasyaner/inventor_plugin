@@ -41,7 +41,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FingerboardSettings.cs" />
+    <Compile Include="FretSettings.cs" />
     <Compile Include="HeadstockSettings.cs" />
+    <Compile Include="InlaySettings.cs" />
     <Compile Include="ISettings.cs" />
     <Compile Include="NeckSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -7,16 +7,16 @@ namespace Settings
     {
         public FingerboardSettings()
         {
-            _settingsDictionary = new Dictionary<SettingName, double>();
+            _settingsDictionary = new Dictionary<SettingName, int>();
         }
 
-        private readonly Dictionary<SettingName, double> _settingsDictionary;
-        public void SetSetting(SettingName settingName, double settingValue)
+        private readonly Dictionary<SettingName, int> _settingsDictionary;
+        public void SetSetting(SettingName settingName, int settingValue)
         {
             if (settingName != SettingName.Material
                 && settingName != SettingName.FingerboardMaterial
-                && settingName != SettingName.HeadstickType
-                && settingName != SettingName.FingerboardInlayType)
+                && settingName != SettingName.ReverseHeadstock
+                && settingName != SettingName.Inlay)
             {
                 if (settingValue <= 0)
                 {
@@ -31,24 +31,25 @@ namespace Settings
                 }
             }
 
-            //Делим на 10, так как инвентор воспринимает все размеры в см, кроме количества ладов
-            if (settingName != SettingName.FretNumber)
-            {
-                _settingsDictionary[settingName] = settingValue / 10;
-            }
-            else
-            {
-                _settingsDictionary[settingName] = settingValue;
-            }
+            _settingsDictionary[settingName] = settingValue;
         }
 
-        public double GetSetting(SettingName settingName)
+        public int GetSetting(SettingName settingName)
         {
             if (!_settingsDictionary.ContainsKey(settingName))
             {
                 throw new ArgumentException("Словарь не содержит такого ключа.");
             }
-            return _settingsDictionary[settingName];
+
+            if ( (settingName == SettingName.FretNumber) 
+                || (settingName == SettingName.FingerboardMaterial) 
+                || (settingName == SettingName.Inlay))
+            {
+                return _settingsDictionary[settingName];
+            }
+
+            //Делим на 10, так как инвентор воспринимает все размеры в см, кроме количества ладов
+            return _settingsDictionary[settingName] / 10;
         }
     }
 }

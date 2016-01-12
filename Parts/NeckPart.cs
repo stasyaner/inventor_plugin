@@ -75,7 +75,7 @@ namespace Parts
             #region atTwelveFretSketch
 
             //Создаем скетч на расстоянии 12-го лада (половины длины грифа) от рабочей плоскости XY.
-            PlanarSketch atTwelveFretSketch = _invetorConnector.MakeNewSketch(3, _settings.GetSetting(SettingName.Length) / 2, _partDoc);
+            PlanarSketch atTwelveFretSketch = _invetorConnector.MakeNewSketch(3, _settings.GetSetting(SettingName.Length) / 2.0, _partDoc);
 
             // Создаем точки
             Point2d atTwelveFretPoint3 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
@@ -84,9 +84,9 @@ namespace Parts
 
             //Рисуем дуги
             SketchArc atTwelveFretSketchArc1 = atTwelveFretSketch.SketchArcs.AddByCenterStartSweepAngle(
-                atTwelveFretPoint0, _settings.GetSetting(SettingName.AtLastFretWidth) / 2, 0, Math.PI * 0.25);
+                atTwelveFretPoint0, _settings.GetSetting(SettingName.AtLastFretWidth) / 2.0, 0, Math.PI * 0.25);
             SketchArc atTwelveFretSketchArc2 = atTwelveFretSketch.SketchArcs.AddByCenterStartSweepAngle(
-                atTwelveFretPoint0, _settings.GetSetting(SettingName.AtLastFretWidth) / 2, Math.PI * 0.75, Math.PI * 0.25);
+                atTwelveFretPoint0, _settings.GetSetting(SettingName.AtLastFretWidth) / 2.0, Math.PI * 0.75, Math.PI * 0.25);
 
             //Рисуем линию
             atTwelveFretSketch.SketchLines.AddByTwoPoints(atTwelveFretSketchArc1.StartSketchPoint, atTwelveFretSketchArc2.EndSketchPoint);

@@ -98,11 +98,5 @@ namespace InventorAPI
             //Обновляем документ.
             partDocument.Update();
         }
-
-        public void DrawCircle(double diameter, PlanarSketch sketch, Object centerPoint)
-        {
-            //рисуем кружочек в текущем скетче
-            sketch.SketchCircles.AddByCenterRadius(centerPoint, diameter / 2);
-        }
     }
 }

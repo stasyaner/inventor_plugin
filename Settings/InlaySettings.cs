@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Settings
 {
-    public class NeckSettings : ISettings
+    public class InlaySettings : ISettings
     {
-        public NeckSettings()
+        public InlaySettings()
         {
             _settingsDictionary = new Dictionary<SettingName, int>();
         }
@@ -13,9 +13,9 @@ namespace Settings
         private readonly Dictionary<SettingName, int> _settingsDictionary;
         public void SetSetting(SettingName settingName, int settingValue)
         {
-            if (settingName != SettingName.Material 
-                && settingName != SettingName.FingerboardMaterial 
-                && settingName != SettingName.ReverseHeadstock 
+            if (settingName != SettingName.Material
+                && settingName != SettingName.FingerboardMaterial
+                && settingName != SettingName.ReverseHeadstock
                 && settingName != SettingName.Inlay)
             {
                 if (settingValue <= 0)
@@ -41,8 +41,7 @@ namespace Settings
                 throw new ArgumentException("Словарь не содержит такого ключа.");
             }
 
-            //Делим на 10, так как инвентор воспринимает все размеры в см
-            return _settingsDictionary[settingName] / 10;
+            return _settingsDictionary[settingName];
         }
     }
 }

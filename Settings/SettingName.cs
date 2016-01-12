@@ -11,9 +11,9 @@
         Material,
         FingerboardMaterial,
         FingerboardRadius,
-        HeadstickType,
+        ReverseHeadstock,
         FretWidth,
         FretHeight,
-        FingerboardInlayType
+        Inlay
     }
 }
