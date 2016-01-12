@@ -34,7 +34,7 @@ namespace Settings
             _settingsDictionary[settingName] = settingValue;
         }
 
-        public int GetSetting(SettingName settingName)
+        public double GetSetting(SettingName settingName)
         {
             if (!_settingsDictionary.ContainsKey(settingName))
             {

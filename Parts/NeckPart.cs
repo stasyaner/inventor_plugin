@@ -56,9 +56,9 @@ namespace Parts
 
             //Рисуем дуги
             SketchArc nutSketchArc1 = nutSketch.SketchArcs.AddByCenterStartSweepAngle(
-                nutPoint0, _settings.GetSetting(SettingName.AtNutWidth) / 2, 0, Math.PI * 0.25);
+                nutPoint0, _settings.GetSetting(SettingName.AtNutWidth) / 2.0, 0, Math.PI * 0.25);
             SketchArc nutSketchArc2 = nutSketch.SketchArcs.AddByCenterStartSweepAngle(
-                nutPoint0, _settings.GetSetting(SettingName.AtNutWidth) / 2, Math.PI * 0.75, Math.PI * 0.25);
+                nutPoint0, _settings.GetSetting(SettingName.AtNutWidth) / 2.0, Math.PI * 0.75, Math.PI * 0.25);
 
             //Рисуем линию
             nutSketch.SketchLines.AddByTwoPoints(nutSketchArc1.StartSketchPoint, nutSketchArc2.EndSketchPoint);
@@ -147,21 +147,25 @@ namespace Parts
 
             #endregion
 
+            #region material
+
             //Меняем материал
-                string materialName = @"Maple";
-                switch (Convert.ToByte(_settings.GetSetting(SettingName.Material)))
-                {
-                    case 0:
-                        materialName = @"Mahogany";
-                        break;
-                    case 1:
-                        materialName = @"Maple";
-                        break;
-                    case 2:
-                        materialName = @"Ash";
-                        break;
-                }
+            string materialName = @"Maple";
+            switch (Convert.ToByte(_settings.GetSetting(SettingName.Material)))
+            {
+                case 0:
+                    materialName = @"Mahogany";
+                    break;
+                case 1:
+                    materialName = @"Maple";
+                    break;
+                case 2:
+                    materialName = @"Ash";
+                    break;
+            }
             _invetorConnector.ChangeMaterial(_partDoc, materialName);
+
+            #endregion
         }
 
         /// <summary>

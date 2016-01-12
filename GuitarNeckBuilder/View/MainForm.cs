@@ -76,7 +76,7 @@ namespace GuitarNeckBuilder.View
                 #region SettingsInit
 
                 ISettings neckSettings = new NeckSettings();
-                neckSettings.SetSetting(SettingName.AtNutWidth, Convert.ToInt32(AtNutWightTextBox.Text));
+                neckSettings.SetSetting(SettingName.AtNutWidth, Convert.ToInt32(AtNutWidthTextBox.Text));
                 neckSettings.SetSetting(SettingName.AtLastFretWidth, Convert.ToInt32(AtLastFretWeightTextBox.Text));
                 neckSettings.SetSetting(SettingName.AtNutHeight, Convert.ToInt32(AtNutHeightTextBox.Text));
                 neckSettings.SetSetting(SettingName.AtTwelveFretHeight, Convert.ToInt32(AtTwelveFretHeightTextBox.Text));
@@ -87,16 +87,17 @@ namespace GuitarNeckBuilder.View
                 fingerboardSettings.SetSetting(SettingName.FingerboardMaterial, FingerboardMaterialComboBox.SelectedIndex);
                 fingerboardSettings.SetSetting(SettingName.FingerboardRadius, Convert.ToInt32(FingerboardRadiusTextBox.Text));
                 fingerboardSettings.SetSetting(SettingName.AtNutHeight, Convert.ToInt32(AtNutHeightTextBox.Text));
-                fingerboardSettings.SetSetting(SettingName.AtNutWidth, Convert.ToInt32(AtNutWightTextBox.Text));
+                fingerboardSettings.SetSetting(SettingName.AtNutWidth, Convert.ToInt32(AtNutWidthTextBox.Text));
                 fingerboardSettings.SetSetting(SettingName.AtLastFretWidth, Convert.ToInt32(AtLastFretWeightTextBox.Text));
                 fingerboardSettings.SetSetting(SettingName.FretNumber, Convert.ToInt32(FretNumberTextBox.Text));
                 fingerboardSettings.SetSetting(SettingName.Length, Convert.ToInt32(LengthTextBox.Text));
                 fingerboardSettings.SetSetting(SettingName.Inlay, Convert.ToByte(InlayCheckBox.Checked));
 
                 ISettings headstockSettings = new HeadstockSettings();
-                headstockSettings.SetSetting(SettingName.AtNutWidth, Convert.ToInt32(AtNutWightTextBox.Text));
+                headstockSettings.SetSetting(SettingName.AtNutWidth, Convert.ToInt32(AtNutWidthTextBox.Text));
                 headstockSettings.SetSetting(SettingName.ReverseHeadstock, Convert.ToByte(ReverseHeadstockCheckBox.Checked));
-                neckSettings.SetSetting(SettingName.AtNutHeight, Convert.ToInt32(AtNutHeightTextBox.Text));
+                headstockSettings.SetSetting(SettingName.AtNutHeight, Convert.ToInt32(AtNutHeightTextBox.Text));
+                headstockSettings.SetSetting(SettingName.Material, MaterialComboBox.SelectedIndex);
 
                 ISettings inlaySettings = new InlaySettings();
                 inlaySettings.SetSetting(SettingName.Inlay, Convert.ToByte(InlayCheckBox.Checked));

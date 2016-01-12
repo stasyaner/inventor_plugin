@@ -34,7 +34,7 @@ namespace Settings
             _settingsDictionary[settingName] = settingValue;
         }
 
-        public int GetSetting(SettingName settingName)
+        public double GetSetting(SettingName settingName)
         {
             if (!_settingsDictionary.ContainsKey(settingName))
             {
@@ -49,7 +49,7 @@ namespace Settings
             }
 
             //Делим на 10, так как инвентор воспринимает все размеры в см, кроме количества ладов
-            return _settingsDictionary[settingName] / 10;
+            return _settingsDictionary[settingName] / 10.0;
         }
     }
 }

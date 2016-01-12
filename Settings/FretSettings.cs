@@ -34,14 +34,14 @@ namespace Settings
             _settingsDictionary[settingName] = settingValue;
         }
 
-        public int GetSetting(SettingName settingName)
+        public double GetSetting(SettingName settingName)
         {
             if (!_settingsDictionary.ContainsKey(settingName))
             {
                 throw new ArgumentException("Словарь не содержит такого ключа.");
             }
 
-            return _settingsDictionary[settingName] / 10;
+            return _settingsDictionary[settingName] / 10.0;
         }
     }
 }

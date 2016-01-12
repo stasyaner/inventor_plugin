@@ -56,8 +56,8 @@
             this.AtNutHeightLlabel = new System.Windows.Forms.Label();
             this.AtLastFretWeightTextBox = new System.Windows.Forms.TextBox();
             this.AtLastFretLabel = new System.Windows.Forms.Label();
-            this.AtNutWightTextBox = new System.Windows.Forms.TextBox();
-            this.AtNutWeightLabel = new System.Windows.Forms.Label();
+            this.AtNutWidthTextBox = new System.Windows.Forms.TextBox();
+            this.AtNutWidthLabel = new System.Windows.Forms.Label();
             this.mainToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.WorkGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -129,8 +129,8 @@
             this.WorkGroupBox.Controls.Add(this.AtNutHeightLlabel);
             this.WorkGroupBox.Controls.Add(this.AtLastFretWeightTextBox);
             this.WorkGroupBox.Controls.Add(this.AtLastFretLabel);
-            this.WorkGroupBox.Controls.Add(this.AtNutWightTextBox);
-            this.WorkGroupBox.Controls.Add(this.AtNutWeightLabel);
+            this.WorkGroupBox.Controls.Add(this.AtNutWidthTextBox);
+            this.WorkGroupBox.Controls.Add(this.AtNutWidthLabel);
             this.WorkGroupBox.Location = new System.Drawing.Point(13, 14);
             this.WorkGroupBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.WorkGroupBox.Name = "WorkGroupBox";
@@ -343,27 +343,27 @@
             this.AtLastFretLabel.TabIndex = 2;
             this.AtLastFretLabel.Text = "Ширина на последнем ладу:";
             // 
-            // AtNutWightTextBox
+            // AtNutWidthTextBox
             // 
-            this.AtNutWightTextBox.Location = new System.Drawing.Point(228, 23);
-            this.AtNutWightTextBox.Name = "AtNutWightTextBox";
-            this.AtNutWightTextBox.Size = new System.Drawing.Size(121, 28);
-            this.AtNutWightTextBox.TabIndex = 1;
-            this.AtNutWightTextBox.Text = "35";
-            this.AtNutWightTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.mainToolTip.SetToolTip(this.AtNutWightTextBox, "Задайте ширину порожка, \r\nкоторая не может быть меньше 23мм\r\nи больше ширины на п" +
+            this.AtNutWidthTextBox.Location = new System.Drawing.Point(228, 23);
+            this.AtNutWidthTextBox.Name = "AtNutWidthTextBox";
+            this.AtNutWidthTextBox.Size = new System.Drawing.Size(121, 28);
+            this.AtNutWidthTextBox.TabIndex = 1;
+            this.AtNutWidthTextBox.Text = "35";
+            this.AtNutWidthTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.mainToolTip.SetToolTip(this.AtNutWidthTextBox, "Задайте ширину порожка, \r\nкоторая не может быть меньше 23мм\r\nи больше ширины на п" +
         "оследнем ладу.");
-            this.AtNutWightTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBox_KeyUp);
-            this.AtNutWightTextBox.Leave += new System.EventHandler(this.TextBox_Leave);
+            this.AtNutWidthTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBox_KeyUp);
+            this.AtNutWidthTextBox.Leave += new System.EventHandler(this.TextBox_Leave);
             // 
-            // AtNutWeightLabel
+            // AtNutWidthLabel
             // 
-            this.AtNutWeightLabel.AutoSize = true;
-            this.AtNutWeightLabel.Location = new System.Drawing.Point(7, 26);
-            this.AtNutWeightLabel.Name = "AtNutWeightLabel";
-            this.AtNutWeightLabel.Size = new System.Drawing.Size(161, 21);
-            this.AtNutWeightLabel.TabIndex = 0;
-            this.AtNutWeightLabel.Text = "Ширина на порожке:";
+            this.AtNutWidthLabel.AutoSize = true;
+            this.AtNutWidthLabel.Location = new System.Drawing.Point(7, 26);
+            this.AtNutWidthLabel.Name = "AtNutWidthLabel";
+            this.AtNutWidthLabel.Size = new System.Drawing.Size(161, 21);
+            this.AtNutWidthLabel.TabIndex = 0;
+            this.AtNutWidthLabel.Text = "Ширина на порожке:";
             // 
             // mainToolTip
             // 
@@ -415,11 +415,11 @@
         private System.Windows.Forms.Label AtNutHeightLlabel;
         private System.Windows.Forms.TextBox AtLastFretWeightTextBox;
         private System.Windows.Forms.Label AtLastFretLabel;
-        private System.Windows.Forms.Label AtNutWeightLabel;
+        private System.Windows.Forms.Label AtNutWidthLabel;
         private System.Windows.Forms.ComboBox MaterialComboBox;
         private System.Windows.Forms.ToolTip mainToolTip;
         private System.Windows.Forms.ComboBox FingerboardMaterialComboBox;
-        private System.Windows.Forms.TextBox AtNutWightTextBox;
+        private System.Windows.Forms.TextBox AtNutWidthTextBox;
         private System.Windows.Forms.CheckBox ReverseHeadstockCheckBox;
         private System.Windows.Forms.CheckBox InlayCheckBox;
     }
