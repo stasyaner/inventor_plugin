@@ -53,10 +53,9 @@ namespace Parts
                 PlanarSketch inlaySketch = _invetorConnector.MakeNewSketch(2, 0, _partDoc);
 
                 // Создаем точки
-                Point2d inlayPoint1 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
-                    0, 0.6);
+                Point2d inlayPoint1 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d();
                 Point2d inlayPoint2 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
-                    0.1, 0.7);
+                    0.1, 0.1);
 
                 //Рисуем прямоугольник по трем точкам
                 inlaySketch.SketchLines.AddAsTwoPointCenteredRectangle(inlayPoint1, inlayPoint2);
@@ -64,7 +63,7 @@ namespace Parts
                 //Выдавливаем прямоугольник
                 ExtrudeDefinition inlayExtrudeDef = _partDoc.ComponentDefinition.Features.ExtrudeFeatures
                     .CreateExtrudeDefinition(inlaySketch.Profiles.AddForSolid(), PartFeatureOperationEnum.kNewBodyOperation);
-                inlayExtrudeDef.SetDistanceExtent(0.05, PartFeatureExtentDirectionEnum.kPositiveExtentDirection);
+                inlayExtrudeDef.SetDistanceExtent(0.1, PartFeatureExtentDirectionEnum.kPositiveExtentDirection);
                 _partDoc.ComponentDefinition.Features.ExtrudeFeatures.Add(inlayExtrudeDef);
 
                 //Меняем материал
