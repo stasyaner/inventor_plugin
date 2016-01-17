@@ -11,6 +11,9 @@ using Settings;
 
 namespace GuitarNeckBuilder.View
 {
+    /// <summary>
+    /// Класс главной формы программы
+    /// </summary>
     public partial class MainForm : Form
     {
         /// <summary>

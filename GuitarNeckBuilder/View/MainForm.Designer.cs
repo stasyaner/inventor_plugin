@@ -88,7 +88,7 @@
             this.FingerboardRadiusTextBox.Name = "FingerboardRadiusTextBox";
             this.FingerboardRadiusTextBox.Size = new System.Drawing.Size(120, 28);
             this.FingerboardRadiusTextBox.TabIndex = 9;
-            this.FingerboardRadiusTextBox.Text = "200";
+            this.FingerboardRadiusTextBox.Text = "250";
             this.FingerboardRadiusTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.FingerboardRadiusTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBox_KeyUp);
             this.FingerboardRadiusTextBox.Leave += new System.EventHandler(this.TextBox_Leave);

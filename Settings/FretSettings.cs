@@ -3,14 +3,29 @@ using System.Collections.Generic;
 
 namespace Settings
 {
+    /// <summary>
+    /// Класс настроек лада
+    /// </summary>
     public class FretSettings : ISettings
     {
+        /// <summary>
+        /// Конструктор без параметров
+        /// </summary>
         public FretSettings()
         {
             _settingsDictionary = new Dictionary<SettingName, int>();
         }
 
+        /// <summary>
+        /// Словарь настроек
+        /// </summary>
         private readonly Dictionary<SettingName, int> _settingsDictionary;
+
+        /// <summary>
+        /// Метода, задающий настройку
+        /// </summary>
+        /// <param name="settingName">Название настройки</param>
+        /// <param name="settingValue">Значение</param>
         public void SetSetting(SettingName settingName, int settingValue)
         {
             if (settingName != SettingName.Material
@@ -34,6 +49,11 @@ namespace Settings
             _settingsDictionary[settingName] = settingValue;
         }
 
+        /// <summary>
+        /// Метода, возвращающий значение настройки
+        /// </summary>
+        /// <param name="settingName">Название настройки</param>
+        /// <returns>Значение настройки</returns>
         public double GetSetting(SettingName settingName)
         {
             if (!_settingsDictionary.ContainsKey(settingName))

@@ -168,12 +168,7 @@ namespace Parts
             #region fretHoleSketch
 
             //Создаем скетч на рабочей плоскости ZX.
-            PlanarSketch fretHoleSketch = _invetorConnector.MakeNewSketch(
-                2,
-                Math.Sqrt(Math.Pow(_settings.GetSetting(SettingName.FingerboardRadius), 2) +
-                          Math.Pow(_settings.GetSetting(SettingName.AtLastFretWidth)/-2.0, 2))
-                          - _settings.GetSetting(SettingName.FingerboardRadius) + 0.2,
-                _partDoc);
+            PlanarSketch fretHoleSketch = _invetorConnector.MakeNewSketch(2, 0.15, _partDoc);
 
             // Создаем точки
             Point2d fretHolePoint1 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
@@ -190,7 +185,7 @@ namespace Parts
             //Выдавливаем прямоугольник
             ExtrudeDefinition fretHoleExtrudeDef = _partDoc.ComponentDefinition.Features.ExtrudeFeatures
                 .CreateExtrudeDefinition(fretHoleSketch.Profiles.AddForSolid(), PartFeatureOperationEnum.kCutOperation);
-            fretHoleExtrudeDef.SetDistanceExtent(0.2, PartFeatureExtentDirectionEnum.kSymmetricExtentDirection);
+            fretHoleExtrudeDef.SetDistanceExtent(0.2, PartFeatureExtentDirectionEnum.kPositiveExtentDirection);
             _partDoc.ComponentDefinition.Features.ExtrudeFeatures.Add(fretHoleExtrudeDef);
 
             //Прямоугольный массив выдавленных прямоугольников
@@ -208,15 +203,10 @@ namespace Parts
 
             #region inlaySketch
 
-            if (_settings.GetSetting(SettingName.Inlay) != 0)
+            if (Math.Abs(_settings.GetSetting(SettingName.Inlay)) > 0)
             {
                 //Создаем скетч на рабочей плоскости ZX.
-                PlanarSketch inlaySketch = _invetorConnector.MakeNewSketch(
-                2,
-                Math.Sqrt(Math.Pow(_settings.GetSetting(SettingName.FingerboardRadius), 2) +
-                          Math.Pow(_settings.GetSetting(SettingName.AtLastFretWidth) / -2.0, 2))
-                          - _settings.GetSetting(SettingName.FingerboardRadius) + 0.2,
-                _partDoc);
+                PlanarSketch inlaySketch = _invetorConnector.MakeNewSketch(2, 0.15, _partDoc);
 
                 // Создаем точки
                 Point2d inlayPoint1 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
@@ -230,7 +220,7 @@ namespace Parts
                 //Выдавливаем прямоугольник
                 ExtrudeDefinition inlayExtrudeDef = _partDoc.ComponentDefinition.Features.ExtrudeFeatures
                     .CreateExtrudeDefinition(inlaySketch.Profiles.AddForSolid(), PartFeatureOperationEnum.kCutOperation);
-                inlayExtrudeDef.SetDistanceExtent(0.2, PartFeatureExtentDirectionEnum.kSymmetricExtentDirection);
+                inlayExtrudeDef.SetDistanceExtent(0.2, PartFeatureExtentDirectionEnum.kPositiveExtentDirection);
                 _partDoc.ComponentDefinition.Features.ExtrudeFeatures.Add(inlayExtrudeDef);
 
                 //Прямоугольный массив выдавленных прямоугольников
