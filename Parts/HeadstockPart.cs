@@ -75,10 +75,12 @@ namespace Parts
                 headstockSketchSplinePointsObjectCollection1);
 
             //Рисуем линии
-            SketchLine headstockSketchLine2 = headstockSketch.SketchLines.AddByTwoPoints(headstockSketchControlPointSpline1.EndSketchPoint,
-                headstockPoint4);
-            SketchLine headstockSketchLine3 = headstockSketch.SketchLines.AddByTwoPoints(headstockSketchLine2.EndSketchPoint,
-                headstockPoint5);
+            SketchLine headstockSketchLine2 =
+                headstockSketch.SketchLines.AddByTwoPoints(headstockSketchControlPointSpline1.EndSketchPoint,
+                    headstockPoint4);
+            SketchLine headstockSketchLine3 =
+                headstockSketch.SketchLines.AddByTwoPoints(headstockSketchLine2.EndSketchPoint,
+                    headstockPoint5);
 
             //Сплайн по управляемым точкам
             ObjectCollection headstockSketchSplinePointsObjectCollection2 = _invetorConnector.InventorApplication
@@ -90,10 +92,25 @@ namespace Parts
                 headstockSketchSplinePointsObjectCollection2);
 
             //Выдавливаем
-            ExtrudeDefinition fretHoleExtrudeDef = _partDoc.ComponentDefinition.Features.ExtrudeFeatures
+            ExtrudeDefinition headstockExtrudeDefinition = _partDoc.ComponentDefinition.Features.ExtrudeFeatures
                 .CreateExtrudeDefinition(headstockSketch.Profiles.AddForSolid(), PartFeatureOperationEnum.kNewBodyOperation);
-            fretHoleExtrudeDef.SetDistanceExtent(_settings.GetSetting(SettingName.AtNutHeight), PartFeatureExtentDirectionEnum.kPositiveExtentDirection);
-            _partDoc.ComponentDefinition.Features.ExtrudeFeatures.Add(fretHoleExtrudeDef);
+            headstockExtrudeDefinition.SetDistanceExtent(_settings.GetSetting(SettingName.AtNutHeight),
+                PartFeatureExtentDirectionEnum.kPositiveExtentDirection);
+            ExtrudeFeature headExtrudeFeature = _partDoc.ComponentDefinition.Features.ExtrudeFeatures.Add(headstockExtrudeDefinition);
+
+            //Сопряжение1
+            EdgeCollection headstockEdgeCollection1 = _invetorConnector.InventorApplication.TransientObjects.CreateEdgeCollection();
+            headstockEdgeCollection1.Add(headExtrudeFeature.StartFaces[1].Edges[2]);
+            FilletDefinition headstockFilletDefinition1 = _partDoc.ComponentDefinition.Features.FilletFeatures.CreateFilletDefinition();
+            headstockFilletDefinition1.AddVariableRadiusEdgeSet(headstockEdgeCollection1, 0.8, 0.3);
+
+            //Сопряжение2
+            EdgeCollection headstockEdgeCollection2 = _invetorConnector.InventorApplication.TransientObjects.CreateEdgeCollection();
+            headstockEdgeCollection2.Add(headExtrudeFeature.StartFaces[1].Edges[5]);
+            headstockFilletDefinition1.AddVariableRadiusEdgeSet(headstockEdgeCollection2, 0.3, 0.8);
+
+            //Примиение сопряжений
+            _partDoc.ComponentDefinition.Features.FilletFeatures.Add(headstockFilletDefinition1);
 
             #region material
 

@@ -32,10 +32,10 @@ namespace PartsAssembler
             _parts = new List<IPart>()
                 {
                     //new NeckPart(settings.First(setting => setting.GetType() == typeof(NeckSettings)), _inventorConnector),
-                    new FingerboardPart(settings.First(setting => setting.GetType() == typeof(FingerboardSettings)), _inventorConnector),
+                    //new FingerboardPart(settings.First(setting => setting.GetType() == typeof(FingerboardSettings)), _inventorConnector),
                     //new FretPart(settings.First(setting => setting.GetType() == typeof(FretSettings)), _inventorConnector),
                     //new InlayPart(settings.First(setting => setting.GetType() == typeof(InlaySettings)), _inventorConnector),
-                    //new HeadstockPart(settings.First(setting => setting.GetType() == typeof(HeadstockSettings)), _inventorConnector)
+                    new HeadstockPart(settings.First(setting => setting.GetType() == typeof(HeadstockSettings)), _inventorConnector)
                 };
         }
 
