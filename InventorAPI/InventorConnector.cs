@@ -5,6 +5,9 @@ using Application = Inventor.Application;
 
 namespace InventorAPI
 {
+    /// <summary>
+    /// Класс коннектора с api inventor'a
+    /// </summary>
     public class InventorConnector
     {
         /// <summary>
@@ -12,11 +15,9 @@ namespace InventorAPI
         /// </summary>
         public InventorConnector()
         {
-            //Инициализируем переменную.
             InventorApplication = null;
             try
             {
-                //Пытаемся перехватить контроль над приложением инвентора, и сделать его видимым.
                 InventorApplication = (Inventor.Application)Marshal.GetActiveObject("Inventor.Application");
                 InventorApplication.Visible = true;
             }
@@ -24,16 +25,12 @@ namespace InventorAPI
             {
                 try
                 {
-                    //Если не получилось перехватить приложение - выкинется исключение на то,
-                    //что такого приложения нет. Попробуем создать приложение вручную.
                     Type invAppType = Type.GetTypeFromProgID("Inventor.Application");
                     InventorApplication = (Application)Activator.CreateInstance(invAppType);
                     InventorApplication.Visible = true;
                 }
                 catch (Exception)
                 {
-                    //Если ничего не получилось - выкинем месседжбокс о том, что инвентор не установлен,
-                    //либо по каким-то причинам не получилось до него добраться.
                     ConnectionError = @"Не получилось запустить инвентор.
                         Проверьте установен ли Autodesk Inventor 2016";
                 }
@@ -64,38 +61,27 @@ namespace InventorAPI
         /// <returns>Полученный скетч</returns>
         public PlanarSketch MakeNewSketch(int n, double offset, PartDocument partDocument)
         {
-            //Получаем ссылку на рабочую плоскость.
             WorkPlane mainPlane = partDocument.ComponentDefinition.WorkPlanes[n];
-
-            //Делаем сдвинутую плоскость.
             WorkPlane offsetPlane = partDocument.ComponentDefinition.WorkPlanes.AddByPlaneAndOffset(mainPlane, offset);
-
-            //Создаем на плоскости скетч.
             PlanarSketch sketch = partDocument.ComponentDefinition.Sketches.Add(offsetPlane);
-
-            //прячем плоскость от пользователя.
             offsetPlane.Visible = false;
 
-            //возвращаем скетч вызвавшему методу
             return sketch;
         }
 
+        /// <summary>
+        /// Метод для смены материала детали
+        /// </summary>
+        /// <param name="partDocument">Ссылка на документ детали</param>
+        /// <param name="materialName">Название материала</param>
         public void ChangeMaterial(PartDocument partDocument, string materialName)
         {
-            //Получаем библиотеку
             Materials materialsLibrary = partDocument.Materials;
-
-            //Берем необходимый материал
             Material myMaterial = materialsLibrary[materialName];
-
-            //Проверка на то, что материал входит в текущую библиотеку
             Material tempMaterial = myMaterial.StyleLocation == StyleLocationEnum.kLibraryStyleLocation
                 ? myMaterial.ConvertToLocal()
                 : myMaterial;
-
-            //Меняем материал.
             partDocument.ComponentDefinition.Material = tempMaterial;
-            //Обновляем документ.
             partDocument.Update();
         }
     }

@@ -20,6 +20,11 @@ namespace Parts
         private readonly PartDocument _partDoc;
 
         /// <summary>
+        /// Ссылка на описание компонентов документа детали
+        /// </summary>
+        public PartComponentDefinition PartDocumentComponentDefinition => _partDoc.ComponentDefinition;
+
+        /// <summary>
         /// Ссылка на настройки детали
         /// </summary>
         private readonly ISettings _settings;
@@ -60,10 +65,10 @@ namespace Parts
                 inlaySketch.SketchLines.AddAsTwoPointCenteredRectangle(inlayPoint1, inlayPoint2);
 
                 //Выдавливаем прямоугольник
-                ExtrudeDefinition inlayExtrudeDef = _partDoc.ComponentDefinition.Features.ExtrudeFeatures
+                ExtrudeDefinition inlayExtrudeDef = PartDocumentComponentDefinition.Features.ExtrudeFeatures
                     .CreateExtrudeDefinition(inlaySketch.Profiles.AddForSolid(), PartFeatureOperationEnum.kNewBodyOperation);
                 inlayExtrudeDef.SetDistanceExtent(0.13, PartFeatureExtentDirectionEnum.kPositiveExtentDirection);
-                _partDoc.ComponentDefinition.Features.ExtrudeFeatures.Add(inlayExtrudeDef);
+                PartDocumentComponentDefinition.Features.ExtrudeFeatures.Add(inlayExtrudeDef);
 
                 //Меняем материал
                 _invetorConnector.ChangeMaterial(_partDoc, "Polystyrene");

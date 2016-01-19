@@ -21,9 +21,19 @@ namespace Parts
         private readonly PartDocument _partDoc;
 
         /// <summary>
+        /// Ссылка на описание компонентов документа детали
+        /// </summary>
+        public PartComponentDefinition PartDocumentComponentDefinition => _partDoc.ComponentDefinition;
+
+        /// <summary>
         /// Ссылка на настройки детали
         /// </summary>
         private readonly ISettings _settings;
+
+        /// <summary>
+        /// Свойство, отражающее значение параметра "реверсная голова грифа"
+        /// </summary>
+        public bool Reversed => _settings.GetSetting(SettingName.ReverseHeadstock) == 1;
 
         /// <summary>
         /// Конструктор с параметрами
@@ -44,6 +54,7 @@ namespace Parts
         /// </summary>
         public void Build()
         {
+            #region partCreating
             //Создаем скетч на рабочей плоскости XY.
             PlanarSketch headstockSketch = _invetorConnector.MakeNewSketch(3, 0, _partDoc);
 
@@ -92,25 +103,29 @@ namespace Parts
                 headstockSketchSplinePointsObjectCollection2);
 
             //Выдавливаем
-            ExtrudeDefinition headstockExtrudeDefinition = _partDoc.ComponentDefinition.Features.ExtrudeFeatures
+            ExtrudeDefinition headstockExtrudeDefinition = PartDocumentComponentDefinition.Features.ExtrudeFeatures
                 .CreateExtrudeDefinition(headstockSketch.Profiles.AddForSolid(), PartFeatureOperationEnum.kNewBodyOperation);
             headstockExtrudeDefinition.SetDistanceExtent(_settings.GetSetting(SettingName.AtNutHeight),
                 PartFeatureExtentDirectionEnum.kPositiveExtentDirection);
-            ExtrudeFeature headExtrudeFeature = _partDoc.ComponentDefinition.Features.ExtrudeFeatures.Add(headstockExtrudeDefinition);
+            ExtrudeFeature headExtrudeFeature = PartDocumentComponentDefinition.Features.ExtrudeFeatures.Add(headstockExtrudeDefinition);
 
             //Сопряжение1
             EdgeCollection headstockEdgeCollection1 = _invetorConnector.InventorApplication.TransientObjects.CreateEdgeCollection();
-            headstockEdgeCollection1.Add(headExtrudeFeature.StartFaces[1].Edges[2]);
-            FilletDefinition headstockFilletDefinition1 = _partDoc.ComponentDefinition.Features.FilletFeatures.CreateFilletDefinition();
-            headstockFilletDefinition1.AddVariableRadiusEdgeSet(headstockEdgeCollection1, 0.8, 0.3);
+            headstockEdgeCollection1.Add(Reversed ? headExtrudeFeature.EndFaces[1].Edges[2] : headExtrudeFeature.StartFaces[1].Edges[2]);
 
             //Сопряжение2
             EdgeCollection headstockEdgeCollection2 = _invetorConnector.InventorApplication.TransientObjects.CreateEdgeCollection();
-            headstockEdgeCollection2.Add(headExtrudeFeature.StartFaces[1].Edges[5]);
-            headstockFilletDefinition1.AddVariableRadiusEdgeSet(headstockEdgeCollection2, 0.3, 0.8);
+
+            headstockEdgeCollection2.Add(Reversed ? headExtrudeFeature.EndFaces[1].Edges[5] : headExtrudeFeature.StartFaces[1].Edges[5]);
+
+            FilletDefinition headstockFilletDefinition1 = PartDocumentComponentDefinition.Features.FilletFeatures.CreateFilletDefinition();
+            headstockFilletDefinition1.AddVariableRadiusEdgeSet(headstockEdgeCollection1, 1, 0.3);
+            headstockFilletDefinition1.AddVariableRadiusEdgeSet(headstockEdgeCollection2, 0.3, 1);
 
             //Примиение сопряжений
-            _partDoc.ComponentDefinition.Features.FilletFeatures.Add(headstockFilletDefinition1);
+            PartDocumentComponentDefinition.Features.FilletFeatures.Add(headstockFilletDefinition1);
+
+            #endregion
 
             #region material
 

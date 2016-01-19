@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parts", "Parts\Parts.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Settings", "Settings\Settings.csproj", "{AD4491D6-7A56-471C-8278-BF7683FB3BDF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeadstockTypes", "HeadstockTypes\HeadstockTypes.csproj", "{11072236-192D-4664-9306-F2EEF59F4B49}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventorAPI", "InventorAPI\InventorAPI.csproj", "{1DAD0BC4-9681-4BE0-8C0A-6F12660825EE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PartsAssembler", "PartsAssembler\PartsAssembler.csproj", "{A36077F1-8D80-45E0-9E8D-831054C85F05}"
@@ -33,10 +31,6 @@ Global
 		{AD4491D6-7A56-471C-8278-BF7683FB3BDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD4491D6-7A56-471C-8278-BF7683FB3BDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD4491D6-7A56-471C-8278-BF7683FB3BDF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{11072236-192D-4664-9306-F2EEF59F4B49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{11072236-192D-4664-9306-F2EEF59F4B49}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{11072236-192D-4664-9306-F2EEF59F4B49}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{11072236-192D-4664-9306-F2EEF59F4B49}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1DAD0BC4-9681-4BE0-8C0A-6F12660825EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1DAD0BC4-9681-4BE0-8C0A-6F12660825EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DAD0BC4-9681-4BE0-8C0A-6F12660825EE}.Release|Any CPU.ActiveCfg = Release|Any CPU

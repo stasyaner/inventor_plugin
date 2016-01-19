@@ -85,10 +85,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HeadstockTypes\HeadstockTypes.csproj">
-      <Project>{11072236-192d-4664-9306-f2eef59f4b49}</Project>
-      <Name>HeadstockTypes</Name>
-    </ProjectReference>
     <ProjectReference Include="..\InventorAPI\InventorAPI.csproj">
       <Project>{1dad0bc4-9681-4be0-8c0a-6f12660825ee}</Project>
       <Name>InventorAPI</Name>

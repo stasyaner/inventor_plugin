@@ -21,6 +21,11 @@ namespace Parts
         private readonly PartDocument _partDoc;
 
         /// <summary>
+        /// Ссылка на описание компонентов документа детали
+        /// </summary>
+        public PartComponentDefinition PartDocumentComponentDefinition => _partDoc.ComponentDefinition;
+
+        /// <summary>
         /// Ссылка на настройки детали
         /// </summary>
         private readonly ISettings _settings;
@@ -157,11 +162,11 @@ namespace Parts
             loftObjectCollection.Add(fingerboardAtTwelveFretSketch.Profiles.AddForSurface());
             loftObjectCollection.Add(fingerboardAtLastFretSketch.Profiles.AddForSurface());
             LoftDefinition skethesLoftDefinition =
-                _partDoc.ComponentDefinition.Features.LoftFeatures.CreateLoftDefinition(loftObjectCollection,
+                PartDocumentComponentDefinition.Features.LoftFeatures.CreateLoftDefinition(loftObjectCollection,
                     PartFeatureOperationEnum.kNewBodyOperation);
 
             //Приминение созданного выше лофта
-            _partDoc.ComponentDefinition.Features.LoftFeatures.Add(skethesLoftDefinition);
+            PartDocumentComponentDefinition.Features.LoftFeatures.Add(skethesLoftDefinition);
 
             #endregion
 
@@ -183,16 +188,16 @@ namespace Parts
                 fretHolePoint2, fretHolePoint3);
 
             //Выдавливаем прямоугольник
-            ExtrudeDefinition fretHoleExtrudeDef = _partDoc.ComponentDefinition.Features.ExtrudeFeatures
+            ExtrudeDefinition fretHoleExtrudeDef = PartDocumentComponentDefinition.Features.ExtrudeFeatures
                 .CreateExtrudeDefinition(fretHoleSketch.Profiles.AddForSolid(), PartFeatureOperationEnum.kCutOperation);
             fretHoleExtrudeDef.SetDistanceExtent(0.2, PartFeatureExtentDirectionEnum.kPositiveExtentDirection);
-            _partDoc.ComponentDefinition.Features.ExtrudeFeatures.Add(fretHoleExtrudeDef);
+            PartDocumentComponentDefinition.Features.ExtrudeFeatures.Add(fretHoleExtrudeDef);
 
             //Прямоугольный массив выдавленных прямоугольников
             ObjectCollection fretHoleObjectCollection = _invetorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
-            fretHoleObjectCollection.Add(_partDoc.ComponentDefinition.Features.ExtrudeFeatures[1]);
-            _partDoc.ComponentDefinition.Features.RectangularPatternFeatures.Add(
-                fretHoleObjectCollection, _partDoc.ComponentDefinition.WorkAxes[3],
+            fretHoleObjectCollection.Add(PartDocumentComponentDefinition.Features.ExtrudeFeatures[1]);
+            PartDocumentComponentDefinition.Features.RectangularPatternFeatures.Add(
+                fretHoleObjectCollection, PartDocumentComponentDefinition.WorkAxes[3],
                 true,
                 _settings.GetSetting(SettingName.FretNumber),
                 //Умножаем на 1.0, чтобы был double
@@ -218,17 +223,17 @@ namespace Parts
                 inlaySketch.SketchLines.AddAsTwoPointCenteredRectangle(inlayPoint1, inlayPoint2);
 
                 //Выдавливаем прямоугольник
-                ExtrudeDefinition inlayExtrudeDef = _partDoc.ComponentDefinition.Features.ExtrudeFeatures
+                ExtrudeDefinition inlayExtrudeDef = PartDocumentComponentDefinition.Features.ExtrudeFeatures
                     .CreateExtrudeDefinition(inlaySketch.Profiles.AddForSolid(), PartFeatureOperationEnum.kCutOperation);
                 inlayExtrudeDef.SetDistanceExtent(0.2, PartFeatureExtentDirectionEnum.kPositiveExtentDirection);
-                _partDoc.ComponentDefinition.Features.ExtrudeFeatures.Add(inlayExtrudeDef);
+                PartDocumentComponentDefinition.Features.ExtrudeFeatures.Add(inlayExtrudeDef);
 
                 //Прямоугольный массив выдавленных прямоугольников
                 ObjectCollection inlayObjectCollection =
                     _invetorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
-                inlayObjectCollection.Add(_partDoc.ComponentDefinition.Features.ExtrudeFeatures[2]);
-                _partDoc.ComponentDefinition.Features.RectangularPatternFeatures.Add(
-                    inlayObjectCollection, _partDoc.ComponentDefinition.WorkAxes[3],
+                inlayObjectCollection.Add(PartDocumentComponentDefinition.Features.ExtrudeFeatures[2]);
+                PartDocumentComponentDefinition.Features.RectangularPatternFeatures.Add(
+                    inlayObjectCollection, PartDocumentComponentDefinition.WorkAxes[3],
                     true,
                     _settings.GetSetting(SettingName.FretNumber),
                     //Умножаем на 1.0, чтобы был double

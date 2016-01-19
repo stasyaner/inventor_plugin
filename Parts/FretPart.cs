@@ -20,6 +20,11 @@ namespace Parts
         private readonly PartDocument _partDoc;
 
         /// <summary>
+        /// Ссылка на описание компонентов документа детали
+        /// </summary>
+        public PartComponentDefinition PartDocumentComponentDefinition => _partDoc.ComponentDefinition;
+
+        /// <summary>
         /// Ссылка на настройки детали
         /// </summary>
         private readonly ISettings _settings;

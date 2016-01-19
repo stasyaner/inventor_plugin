@@ -21,6 +21,11 @@ namespace Parts
         private readonly PartDocument _partDoc;
 
         /// <summary>
+        /// Ссылка на описание компонентов документа детали
+        /// </summary>
+        public PartComponentDefinition PartDocumentComponentDefinition => _partDoc.ComponentDefinition;
+
+        /// <summary>
         /// Ссылка на настройки детали
         /// </summary>
         private readonly ISettings _settings;
@@ -139,11 +144,11 @@ namespace Parts
             loftObjectCollection.Add(nutSketch.Profiles.AddForSurface());
             loftObjectCollection.Add(atTwelveFretSketch.Profiles.AddForSurface());
             loftObjectCollection.Add(atLastFretSketch.Profiles.AddForSurface());
-            LoftDefinition skethesLoftDefinition = _partDoc.ComponentDefinition.Features.LoftFeatures.CreateLoftDefinition(loftObjectCollection,
+            LoftDefinition skethesLoftDefinition = PartDocumentComponentDefinition.Features.LoftFeatures.CreateLoftDefinition(loftObjectCollection,
                 PartFeatureOperationEnum.kNewBodyOperation);
 
             //Приминение созданного выше лофта
-            _partDoc.ComponentDefinition.Features.LoftFeatures.Add(skethesLoftDefinition);
+            PartDocumentComponentDefinition.Features.LoftFeatures.Add(skethesLoftDefinition);
 
             #endregion
 

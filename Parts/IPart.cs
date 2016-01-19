@@ -1,4 +1,5 @@
-﻿using InventorAPI;
+﻿using Inventor;
+using InventorAPI;
 using Settings;
 
 namespace Parts
@@ -8,6 +9,7 @@ namespace Parts
     /// </summary>
     public interface IPart
     {
+        PartComponentDefinition PartDocumentComponentDefinition { get; }
         /// <summary>
         /// Построение детали
         /// </summary>
