@@ -12,7 +12,7 @@ namespace Parts
         /// <summary>
         /// Поле ссылки на коннектор к инвентору
         /// </summary>
-        private readonly InventorConnector _invetorConnector;
+        private readonly InventorConnector _inventorConnector;
 
         /// <summary>
         /// Ссылка на документ детали.
@@ -30,16 +30,21 @@ namespace Parts
         private readonly ISettings _settings;
 
         /// <summary>
+        /// Свойство для получения состояния инкрустации (активна/не активна)
+        /// </summary>
+        public bool Active => _settings.GetSetting(SettingName.Inlay) == 1;
+
+        /// <summary>
         /// Конструктор с параметрами
         /// </summary>
         /// <param name="settings"></param>
         /// <param name="inventorConnector"></param>
         public InlayPart(ISettings settings, InventorConnector inventorConnector)
         {
-            if (settings.GetSetting(SettingName.Inlay) == 1)
+            _settings = settings;
+            if (Active)
             {
-                _settings = settings;
-                _invetorConnector = inventorConnector;
+                _inventorConnector = inventorConnector;
                 _partDoc = (PartDocument) inventorConnector.InventorApplication.Documents.Add(
                     DocumentTypeEnum.kPartDocumentObject,
                     inventorConnector.InventorApplication.FileManager.GetTemplateFile(
@@ -52,14 +57,14 @@ namespace Parts
         /// </summary>
         public void Build()
         {
-            if ((_settings != null) && (_settings.GetSetting(SettingName.Inlay) == 1))
+            if (Active)
             {
                 //Создаем скетч на рабочей плоскости ZX.
-                PlanarSketch inlaySketch = _invetorConnector.MakeNewSketch(2, 0, _partDoc);
+                PlanarSketch inlaySketch = _inventorConnector.MakeNewSketch(2, 0, _partDoc);
 
                 // Создаем точки
-                Point2d inlayPoint1 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d();
-                Point2d inlayPoint2 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(0.1, 0.1);
+                Point2d inlayPoint1 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d();
+                Point2d inlayPoint2 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(0.1, 0.1);
 
                 //Рисуем прямоугольник по трем точкам
                 inlaySketch.SketchLines.AddAsTwoPointCenteredRectangle(inlayPoint1, inlayPoint2);
@@ -67,11 +72,11 @@ namespace Parts
                 //Выдавливаем прямоугольник
                 ExtrudeDefinition inlayExtrudeDef = PartDocumentComponentDefinition.Features.ExtrudeFeatures
                     .CreateExtrudeDefinition(inlaySketch.Profiles.AddForSolid(), PartFeatureOperationEnum.kNewBodyOperation);
-                inlayExtrudeDef.SetDistanceExtent(0.13, PartFeatureExtentDirectionEnum.kPositiveExtentDirection);
+                inlayExtrudeDef.SetDistanceExtent(0.12, PartFeatureExtentDirectionEnum.kPositiveExtentDirection);
                 PartDocumentComponentDefinition.Features.ExtrudeFeatures.Add(inlayExtrudeDef);
 
                 //Меняем материал
-                _invetorConnector.ChangeMaterial(_partDoc, "Polystyrene");
+                _inventorConnector.ChangeMaterial(_partDoc, "Polystyrene");
             }
         }
 

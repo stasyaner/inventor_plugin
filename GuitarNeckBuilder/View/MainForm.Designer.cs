@@ -54,8 +54,8 @@
             this.AtTwelveFretHeightLabel = new System.Windows.Forms.Label();
             this.AtNutHeightTextBox = new System.Windows.Forms.TextBox();
             this.AtNutHeightLlabel = new System.Windows.Forms.Label();
-            this.AtLastFretWeightTextBox = new System.Windows.Forms.TextBox();
-            this.AtLastFretLabel = new System.Windows.Forms.Label();
+            this.AtLastFretWidthTextBox = new System.Windows.Forms.TextBox();
+            this.AtLastFretWidthLabel = new System.Windows.Forms.Label();
             this.AtNutWidthTextBox = new System.Windows.Forms.TextBox();
             this.AtNutWidthLabel = new System.Windows.Forms.Label();
             this.mainToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -127,8 +127,8 @@
             this.WorkGroupBox.Controls.Add(this.AtTwelveFretHeightLabel);
             this.WorkGroupBox.Controls.Add(this.AtNutHeightTextBox);
             this.WorkGroupBox.Controls.Add(this.AtNutHeightLlabel);
-            this.WorkGroupBox.Controls.Add(this.AtLastFretWeightTextBox);
-            this.WorkGroupBox.Controls.Add(this.AtLastFretLabel);
+            this.WorkGroupBox.Controls.Add(this.AtLastFretWidthTextBox);
+            this.WorkGroupBox.Controls.Add(this.AtLastFretWidthLabel);
             this.WorkGroupBox.Controls.Add(this.AtNutWidthTextBox);
             this.WorkGroupBox.Controls.Add(this.AtNutWidthLabel);
             this.WorkGroupBox.Location = new System.Drawing.Point(13, 14);
@@ -193,7 +193,7 @@
             this.FretHeightTextBox.Name = "FretHeightTextBox";
             this.FretHeightTextBox.Size = new System.Drawing.Size(120, 28);
             this.FretHeightTextBox.TabIndex = 25;
-            this.FretHeightTextBox.Text = "2";
+            this.FretHeightTextBox.Text = "1";
             this.FretHeightTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.FretHeightTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBox_KeyUp);
             this.FretHeightTextBox.Leave += new System.EventHandler(this.TextBox_Leave);
@@ -323,25 +323,25 @@
             this.AtNutHeightLlabel.TabIndex = 4;
             this.AtNutHeightLlabel.Text = "Толщина на порожке:";
             // 
-            // AtLastFretWeightTextBox
+            // AtLastFretWidthTextBox
             // 
-            this.AtLastFretWeightTextBox.Location = new System.Drawing.Point(228, 59);
-            this.AtLastFretWeightTextBox.Name = "AtLastFretWeightTextBox";
-            this.AtLastFretWeightTextBox.Size = new System.Drawing.Size(121, 28);
-            this.AtLastFretWeightTextBox.TabIndex = 3;
-            this.AtLastFretWeightTextBox.Text = "38";
-            this.AtLastFretWeightTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.AtLastFretWeightTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBox_KeyUp);
-            this.AtLastFretWeightTextBox.Leave += new System.EventHandler(this.TextBox_Leave);
+            this.AtLastFretWidthTextBox.Location = new System.Drawing.Point(228, 59);
+            this.AtLastFretWidthTextBox.Name = "AtLastFretWidthTextBox";
+            this.AtLastFretWidthTextBox.Size = new System.Drawing.Size(121, 28);
+            this.AtLastFretWidthTextBox.TabIndex = 3;
+            this.AtLastFretWidthTextBox.Text = "38";
+            this.AtLastFretWidthTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.AtLastFretWidthTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBox_KeyUp);
+            this.AtLastFretWidthTextBox.Leave += new System.EventHandler(this.TextBox_Leave);
             // 
-            // AtLastFretLabel
+            // AtLastFretWidthLabel
             // 
-            this.AtLastFretLabel.AutoSize = true;
-            this.AtLastFretLabel.Location = new System.Drawing.Point(7, 62);
-            this.AtLastFretLabel.Name = "AtLastFretLabel";
-            this.AtLastFretLabel.Size = new System.Drawing.Size(215, 21);
-            this.AtLastFretLabel.TabIndex = 2;
-            this.AtLastFretLabel.Text = "Ширина на последнем ладу:";
+            this.AtLastFretWidthLabel.AutoSize = true;
+            this.AtLastFretWidthLabel.Location = new System.Drawing.Point(7, 62);
+            this.AtLastFretWidthLabel.Name = "AtLastFretWidthLabel";
+            this.AtLastFretWidthLabel.Size = new System.Drawing.Size(215, 21);
+            this.AtLastFretWidthLabel.TabIndex = 2;
+            this.AtLastFretWidthLabel.Text = "Ширина на последнем ладу:";
             // 
             // AtNutWidthTextBox
             // 
@@ -413,8 +413,8 @@
         private System.Windows.Forms.Label AtTwelveFretHeightLabel;
         private System.Windows.Forms.TextBox AtNutHeightTextBox;
         private System.Windows.Forms.Label AtNutHeightLlabel;
-        private System.Windows.Forms.TextBox AtLastFretWeightTextBox;
-        private System.Windows.Forms.Label AtLastFretLabel;
+        private System.Windows.Forms.TextBox AtLastFretWidthTextBox;
+        private System.Windows.Forms.Label AtLastFretWidthLabel;
         private System.Windows.Forms.Label AtNutWidthLabel;
         private System.Windows.Forms.ComboBox MaterialComboBox;
         private System.Windows.Forms.ToolTip mainToolTip;

@@ -13,7 +13,7 @@ namespace Parts
         /// <summary>
         /// Поле ссылки на коннектор к инвентору
         /// </summary>
-        private readonly InventorConnector _invetorConnector;
+        private readonly InventorConnector _inventorConnector;
 
         /// <summary>
         /// Ссылка на документ детали.
@@ -38,7 +38,7 @@ namespace Parts
         public NeckPart(ISettings settings, InventorConnector inventorConnector)
         {
             _settings = settings;
-            _invetorConnector = inventorConnector;
+            _inventorConnector = inventorConnector;
             _partDoc = (PartDocument)inventorConnector.InventorApplication.Documents.Add(
                 DocumentTypeEnum.kPartDocumentObject, inventorConnector.InventorApplication.FileManager.GetTemplateFile(
                     DocumentTypeEnum.kPartDocumentObject, SystemOfMeasureEnum.kMetricSystemOfMeasure));
@@ -52,12 +52,12 @@ namespace Parts
             #region nutSketch
 
             //Создаем скетч на рабочей плоскости XY.
-            PlanarSketch nutSketch = _invetorConnector.MakeNewSketch(3, 0, _partDoc);
+            PlanarSketch nutSketch = _inventorConnector.MakeNewSketch(3, 0, _partDoc);
 
             // Создаем точки
-            Point2d nutPoint3 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d nutPoint3 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 0, _settings.GetSetting(SettingName.AtNutHeight));
-            Point2d nutPoint0 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d();
+            Point2d nutPoint0 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d();
 
             //Рисуем дуги
             SketchArc nutSketchArc1 = nutSketch.SketchArcs.AddByCenterStartSweepAngle(
@@ -69,7 +69,7 @@ namespace Parts
             nutSketch.SketchLines.AddByTwoPoints(nutSketchArc1.StartSketchPoint, nutSketchArc2.EndSketchPoint);
 
             //Сплайн между дугами
-            ObjectCollection nutSketchSplinePointsObjectCollection = _invetorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
+            ObjectCollection nutSketchSplinePointsObjectCollection = _inventorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
             nutSketchSplinePointsObjectCollection.Add(nutSketchArc1.EndSketchPoint);
             nutSketchSplinePointsObjectCollection.Add(nutPoint3);
             nutSketchSplinePointsObjectCollection.Add(nutSketchArc2.StartSketchPoint);
@@ -80,12 +80,12 @@ namespace Parts
             #region atTwelveFretSketch
 
             //Создаем скетч на расстоянии 12-го лада (половины длины грифа) от рабочей плоскости XY.
-            PlanarSketch atTwelveFretSketch = _invetorConnector.MakeNewSketch(3, _settings.GetSetting(SettingName.Length) / 2.0, _partDoc);
+            PlanarSketch atTwelveFretSketch = _inventorConnector.MakeNewSketch(3, _settings.GetSetting(SettingName.Length) / 2.0, _partDoc);
 
             // Создаем точки
-            Point2d atTwelveFretPoint3 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d atTwelveFretPoint3 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 0, _settings.GetSetting(SettingName.AtTwelveFretHeight));
-            Point2d atTwelveFretPoint0 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d();
+            Point2d atTwelveFretPoint0 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d();
 
             //Рисуем дуги
             SketchArc atTwelveFretSketchArc1 = atTwelveFretSketch.SketchArcs.AddByCenterStartSweepAngle(
@@ -97,7 +97,7 @@ namespace Parts
             atTwelveFretSketch.SketchLines.AddByTwoPoints(atTwelveFretSketchArc1.StartSketchPoint, atTwelveFretSketchArc2.EndSketchPoint);
 
             //Задание точек сплайна между дугами
-            ObjectCollection atTwelveFretSketchSplinePointsObjectCollection = _invetorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
+            ObjectCollection atTwelveFretSketchSplinePointsObjectCollection = _inventorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
             atTwelveFretSketchSplinePointsObjectCollection.Add(atTwelveFretSketchArc1.EndSketchPoint);
             atTwelveFretSketchSplinePointsObjectCollection.Add(atTwelveFretPoint3);
             atTwelveFretSketchSplinePointsObjectCollection.Add(atTwelveFretSketchArc2.StartSketchPoint);
@@ -110,12 +110,12 @@ namespace Parts
             #region atLastFretSketch
 
             //Создаем скетч на расстоянии длины грифа от рабочей плоскости XY.
-            PlanarSketch atLastFretSketch = _invetorConnector.MakeNewSketch(3, _settings.GetSetting(SettingName.Length), _partDoc);
+            PlanarSketch atLastFretSketch = _inventorConnector.MakeNewSketch(3, _settings.GetSetting(SettingName.Length), _partDoc);
 
             // Создаем точки
-            Point2d atLastFretPoint3 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d atLastFretPoint3 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 0, _settings.GetSetting(SettingName.AtTwelveFretHeight));
-            Point2d atLastFretPoint0 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d();
+            Point2d atLastFretPoint0 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d();
 
             //Рисуем дуги
             SketchArc atLastFretSketchArc1 = atLastFretSketch.SketchArcs.AddByCenterStartSweepAngle(
@@ -127,7 +127,7 @@ namespace Parts
             atLastFretSketch.SketchLines.AddByTwoPoints(atLastFretSketchArc1.StartSketchPoint, atLastFretSketchArc2.EndSketchPoint);
 
             //Задание точек сплайна между дугами
-            ObjectCollection atLastFretSketchSplinePointsObjectCollection = _invetorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
+            ObjectCollection atLastFretSketchSplinePointsObjectCollection = _inventorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
             atLastFretSketchSplinePointsObjectCollection.Add(atLastFretSketchArc1.EndSketchPoint);
             atLastFretSketchSplinePointsObjectCollection.Add(atLastFretPoint3);
             atLastFretSketchSplinePointsObjectCollection.Add(atLastFretSketchArc2.StartSketchPoint);
@@ -140,7 +140,7 @@ namespace Parts
             #region loft
 
             //Задание описания лофта между тремя скетчами, заданнымми выше
-            ObjectCollection loftObjectCollection = _invetorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
+            ObjectCollection loftObjectCollection = _inventorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
             loftObjectCollection.Add(nutSketch.Profiles.AddForSurface());
             loftObjectCollection.Add(atTwelveFretSketch.Profiles.AddForSurface());
             loftObjectCollection.Add(atLastFretSketch.Profiles.AddForSurface());
@@ -168,7 +168,7 @@ namespace Parts
                     materialName = @"Ash";
                     break;
             }
-            _invetorConnector.ChangeMaterial(_partDoc, materialName);
+            _inventorConnector.ChangeMaterial(_partDoc, materialName);
 
             #endregion
         }

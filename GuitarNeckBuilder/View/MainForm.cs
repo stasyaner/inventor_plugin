@@ -79,7 +79,7 @@ namespace GuitarNeckBuilder.View
 
                 ISettings neckSettings = new NeckSettings();
                 neckSettings.SetSetting(SettingName.AtNutWidth, Convert.ToInt32(AtNutWidthTextBox.Text));
-                neckSettings.SetSetting(SettingName.AtLastFretWidth, Convert.ToInt32(AtLastFretWeightTextBox.Text));
+                neckSettings.SetSetting(SettingName.AtLastFretWidth, Convert.ToInt32(AtLastFretWidthTextBox.Text));
                 neckSettings.SetSetting(SettingName.AtNutHeight, Convert.ToInt32(AtNutHeightTextBox.Text));
                 neckSettings.SetSetting(SettingName.AtTwelveFretHeight, Convert.ToInt32(AtTwelveFretHeightTextBox.Text));
                 neckSettings.SetSetting(SettingName.Length, Convert.ToInt32(LengthTextBox.Text));
@@ -90,7 +90,7 @@ namespace GuitarNeckBuilder.View
                 fingerboardSettings.SetSetting(SettingName.FingerboardRadius, Convert.ToInt32(FingerboardRadiusTextBox.Text));
                 fingerboardSettings.SetSetting(SettingName.AtNutHeight, Convert.ToInt32(AtNutHeightTextBox.Text));
                 fingerboardSettings.SetSetting(SettingName.AtNutWidth, Convert.ToInt32(AtNutWidthTextBox.Text));
-                fingerboardSettings.SetSetting(SettingName.AtLastFretWidth, Convert.ToInt32(AtLastFretWeightTextBox.Text));
+                fingerboardSettings.SetSetting(SettingName.AtLastFretWidth, Convert.ToInt32(AtLastFretWidthTextBox.Text));
                 fingerboardSettings.SetSetting(SettingName.FretNumber, Convert.ToInt32(FretNumberTextBox.Text));
                 fingerboardSettings.SetSetting(SettingName.Length, Convert.ToInt32(LengthTextBox.Text));
                 fingerboardSettings.SetSetting(SettingName.Inlay, Convert.ToByte(InlayCheckBox.Checked));
@@ -107,7 +107,9 @@ namespace GuitarNeckBuilder.View
                 ISettings fretSettings = new FretSettings();
                 fretSettings.SetSetting(SettingName.FretWidth, Convert.ToInt32(FretWidthTextBox.Text));
                 fretSettings.SetSetting(SettingName.FretHeight, Convert.ToInt32(FretHeightTextBox.Text));
-                fretSettings.SetSetting(SettingName.AtLastFretWidth, Convert.ToInt32(AtLastFretWeightTextBox.Text));
+                fretSettings.SetSetting(SettingName.AtNutWidth, Convert.ToInt32(AtNutWidthTextBox.Text));
+                fretSettings.SetSetting(SettingName.FingerboardRadius, Convert.ToInt32(FingerboardRadiusTextBox.Text));
+                fretSettings.SetSetting(SettingName.AtNutHeight, Convert.ToInt32(AtNutHeightTextBox.Text));
 
                 #endregion
 

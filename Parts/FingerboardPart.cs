@@ -13,7 +13,7 @@ namespace Parts
         /// <summary>
         /// Поле ссылки на коннектор к инвентору
         /// </summary>
-        private readonly InventorConnector _invetorConnector;
+        private readonly InventorConnector _inventorConnector;
 
         /// <summary>
         /// Ссылка на документ детали.
@@ -30,6 +30,8 @@ namespace Parts
         /// </summary>
         private readonly ISettings _settings;
 
+        public int FretNumber => Convert.ToInt32(_settings.GetSetting(SettingName.FretNumber));
+
         /// <summary>
         /// Конструктор с параметрами
         /// </summary>
@@ -38,7 +40,7 @@ namespace Parts
         public FingerboardPart(ISettings settings, InventorConnector inventorConnector)
         {
             _settings = settings;
-            _invetorConnector = inventorConnector;
+            _inventorConnector = inventorConnector;
             _partDoc = (PartDocument)inventorConnector.InventorApplication.Documents.Add(
                 DocumentTypeEnum.kPartDocumentObject, inventorConnector.InventorApplication.FileManager.GetTemplateFile(
                     DocumentTypeEnum.kPartDocumentObject, SystemOfMeasureEnum.kMetricSystemOfMeasure));
@@ -52,20 +54,19 @@ namespace Parts
             #region fingerboardAtNutSketch
 
             //Создаем скетч на рабочей плоскости XY.
-            PlanarSketch fingerboardAtNutSketch = _invetorConnector.MakeNewSketch(3, 0, _partDoc);
+            PlanarSketch fingerboardAtNutSketch = _inventorConnector.MakeNewSketch(3, 0, _partDoc);
 
             // Создаем точки
-            Point2d fingerboardAtNutPoint1 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d fingerboardAtNutPoint1 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 _settings.GetSetting(SettingName.AtNutWidth) / -2.0);
-            Point2d fingerboardAtNutPoint2 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d fingerboardAtNutPoint2 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 _settings.GetSetting(SettingName.AtNutWidth) / 2.0);
-            Point2d fingerboardAtNutPoint3 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d fingerboardAtNutPoint3 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 _settings.GetSetting(SettingName.AtNutWidth) / 2.0, 0.2);
-            Point2d fingerboardAtNutPoint4 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d fingerboardAtNutPoint4 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 _settings.GetSetting(SettingName.AtNutWidth) / -2.0, 0.2);
-            Point2d fingerboardAtNutPoint0 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
-                0,
-                Math.Sqrt(Math.Pow(_settings.GetSetting(SettingName.FingerboardRadius), 2) -
+            Point2d fingerboardAtNutPoint0 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+                0, Math.Sqrt(Math.Pow(_settings.GetSetting(SettingName.FingerboardRadius), 2) -
                           Math.Pow(_settings.GetSetting(SettingName.AtNutWidth) / -2.0, 2))//Теорема пифагора
                           * -1 + 0.2);
 
@@ -86,19 +87,19 @@ namespace Parts
             #region fingerboardAtTwelveFretSketch
 
             //Создаем скетч на расстоянии 12-го лада (половины длины грифа) от рабочей плоскости XY.
-            PlanarSketch fingerboardAtTwelveFretSketch = _invetorConnector.MakeNewSketch(3,
+            PlanarSketch fingerboardAtTwelveFretSketch = _inventorConnector.MakeNewSketch(3,
                 _settings.GetSetting(SettingName.Length) / 2.0, _partDoc);
 
             // Создаем точки
-            Point2d fingerboardAtTwelveFretPoint1 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d fingerboardAtTwelveFretPoint1 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                     _settings.GetSetting(SettingName.AtLastFretWidth) / -2.0);
-            Point2d fingerboardAtTwelveFretPoint2 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d fingerboardAtTwelveFretPoint2 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                     _settings.GetSetting(SettingName.AtLastFretWidth) / 2.0);
-            Point2d fingerboardAtTwelveFretPoint3 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d fingerboardAtTwelveFretPoint3 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                     _settings.GetSetting(SettingName.AtLastFretWidth) / 2.0, 0.2);
-            Point2d fingerboardAtTwelveFretPoint4 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d fingerboardAtTwelveFretPoint4 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 _settings.GetSetting(SettingName.AtLastFretWidth) / -2.0, 0.2);
-            Point2d fingerboardAtTwelveFretPoint0 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d fingerboardAtTwelveFretPoint0 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 0,
                 Math.Sqrt(Math.Pow(_settings.GetSetting(SettingName.FingerboardRadius), 2) -
                           Math.Pow(_settings.GetSetting(SettingName.AtLastFretWidth) / -2.0, 2))//Теорема пифагора
@@ -121,19 +122,19 @@ namespace Parts
             #region fingerboardAtLastFretSketch
 
             //Создаем скетч на расстоянии длины грифа от рабочей плоскости XY.
-            PlanarSketch fingerboardAtLastFretSketch = _invetorConnector.MakeNewSketch(3,
+            PlanarSketch fingerboardAtLastFretSketch = _inventorConnector.MakeNewSketch(3,
                 _settings.GetSetting(SettingName.Length), _partDoc);
 
             // Создаем точки
-            Point2d fingerboardAtLastFretPoint1 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d fingerboardAtLastFretPoint1 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 _settings.GetSetting(SettingName.AtLastFretWidth) / -2.0);
-            Point2d fingerboardAtLastFretPoint2 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d fingerboardAtLastFretPoint2 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 _settings.GetSetting(SettingName.AtLastFretWidth) / 2.0);
-            Point2d fingerboardLastFretPoint3 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d fingerboardLastFretPoint3 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 _settings.GetSetting(SettingName.AtLastFretWidth) / 2.0, 0.2);
-            Point2d fingerboardAtLastFretPoint4 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d fingerboardAtLastFretPoint4 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 _settings.GetSetting(SettingName.AtLastFretWidth) / -2.0, 0.2);
-            Point2d fingerboardAtLastFretPoint0 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d fingerboardAtLastFretPoint0 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 0,
                 Math.Sqrt(Math.Pow(_settings.GetSetting(SettingName.FingerboardRadius), 2) -
                           Math.Pow(_settings.GetSetting(SettingName.AtLastFretWidth) / -2.0, 2))//Теорема пифагора
@@ -157,7 +158,7 @@ namespace Parts
 
             //Задание описания лофта между тремя скетчами, заданнымми выше
             ObjectCollection loftObjectCollection =
-                _invetorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
+                _inventorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
             loftObjectCollection.Add(fingerboardAtNutSketch.Profiles.AddForSurface());
             loftObjectCollection.Add(fingerboardAtTwelveFretSketch.Profiles.AddForSurface());
             loftObjectCollection.Add(fingerboardAtLastFretSketch.Profiles.AddForSurface());
@@ -173,19 +174,18 @@ namespace Parts
             #region fretHoleSketch
 
             //Создаем скетч на рабочей плоскости ZX.
-            PlanarSketch fretHoleSketch = _invetorConnector.MakeNewSketch(2, 0.15, _partDoc);
+            PlanarSketch fretHoleSketch = _inventorConnector.MakeNewSketch(2, 0.15, _partDoc);
 
             // Создаем точки
-            Point2d fretHolePoint1 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d fretHolePoint1 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 _settings.GetSetting(SettingName.AtNutWidth) / -1.5, 1.2);
-            Point2d fretHolePoint2 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d fretHolePoint2 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 _settings.GetSetting(SettingName.AtNutWidth) / 1.5, 1.2);
-            Point2d fretHolePoint3 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d fretHolePoint3 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 _settings.GetSetting(SettingName.AtNutWidth) / 1.5, 1.25);
 
             //Рисуем прямоугольник по трем точкам
-            fretHoleSketch.SketchLines.AddAsThreePointRectangle(fretHolePoint1,
-                fretHolePoint2, fretHolePoint3);
+            fretHoleSketch.SketchLines.AddAsThreePointRectangle(fretHolePoint1, fretHolePoint2, fretHolePoint3);
 
             //Выдавливаем прямоугольник
             ExtrudeDefinition fretHoleExtrudeDef = PartDocumentComponentDefinition.Features.ExtrudeFeatures
@@ -194,7 +194,7 @@ namespace Parts
             PartDocumentComponentDefinition.Features.ExtrudeFeatures.Add(fretHoleExtrudeDef);
 
             //Прямоугольный массив выдавленных прямоугольников
-            ObjectCollection fretHoleObjectCollection = _invetorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
+            ObjectCollection fretHoleObjectCollection = _inventorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
             fretHoleObjectCollection.Add(PartDocumentComponentDefinition.Features.ExtrudeFeatures[1]);
             PartDocumentComponentDefinition.Features.RectangularPatternFeatures.Add(
                 fretHoleObjectCollection, PartDocumentComponentDefinition.WorkAxes[3],
@@ -211,12 +211,12 @@ namespace Parts
             if (Math.Abs(_settings.GetSetting(SettingName.Inlay)) > 0)
             {
                 //Создаем скетч на рабочей плоскости ZX.
-                PlanarSketch inlaySketch = _invetorConnector.MakeNewSketch(2, 0.15, _partDoc);
+                PlanarSketch inlaySketch = _inventorConnector.MakeNewSketch(2, 0.15, _partDoc);
 
                 // Создаем точки
-                Point2d inlayPoint1 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+                Point2d inlayPoint1 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                     0, 0.6);
-                Point2d inlayPoint2 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+                Point2d inlayPoint2 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                     0.1, 0.7);
 
                 //Рисуем прямоугольник по трем точкам
@@ -230,7 +230,7 @@ namespace Parts
 
                 //Прямоугольный массив выдавленных прямоугольников
                 ObjectCollection inlayObjectCollection =
-                    _invetorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
+                    _inventorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
                 inlayObjectCollection.Add(PartDocumentComponentDefinition.Features.ExtrudeFeatures[2]);
                 PartDocumentComponentDefinition.Features.RectangularPatternFeatures.Add(
                     inlayObjectCollection, PartDocumentComponentDefinition.WorkAxes[3],
@@ -242,7 +242,7 @@ namespace Parts
             }
 
             #endregion
-
+            
             #region material
 
             //Меняем материал
@@ -262,7 +262,7 @@ namespace Parts
                     materialName = "Ash";
                     break;
             }
-            _invetorConnector.ChangeMaterial(_partDoc, materialName);
+            _inventorConnector.ChangeMaterial(_partDoc, materialName);
 
             #endregion
         }

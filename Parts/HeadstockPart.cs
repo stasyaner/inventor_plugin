@@ -13,7 +13,7 @@ namespace Parts
         /// <summary>
         /// Поле ссылки на коннектор к инвентору
         /// </summary>
-        private readonly InventorConnector _invetorConnector;
+        private readonly InventorConnector _inventorConnector;
 
         /// <summary>
         /// Ссылка на документ детали.
@@ -43,7 +43,7 @@ namespace Parts
         public HeadstockPart(ISettings settings, InventorConnector inventorConnector)
         {
             _settings = settings;
-            _invetorConnector = inventorConnector;
+            _inventorConnector = inventorConnector;
             _partDoc = (PartDocument)inventorConnector.InventorApplication.Documents.Add(
                 DocumentTypeEnum.kPartDocumentObject, inventorConnector.InventorApplication.FileManager.GetTemplateFile(
                     DocumentTypeEnum.kPartDocumentObject, SystemOfMeasureEnum.kMetricSystemOfMeasure));
@@ -56,28 +56,28 @@ namespace Parts
         {
             #region partCreating
             //Создаем скетч на рабочей плоскости XY.
-            PlanarSketch headstockSketch = _invetorConnector.MakeNewSketch(3, 0, _partDoc);
+            PlanarSketch headstockSketch = _inventorConnector.MakeNewSketch(3, 0, _partDoc);
 
             // Создаем точки
-            Point2d headstockPoint0 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d();
-            Point2d headstockPoint1 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d headstockPoint0 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d();
+            Point2d headstockPoint1 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 0, _settings.GetSetting(SettingName.AtNutWidth));
-            Point2d headstockPoint2 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d headstockPoint2 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 1.37, _settings.GetSetting(SettingName.AtNutWidth) - 0.15);
-            Point2d headstockPoint3 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d headstockPoint3 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 2.2, _settings.GetSetting(SettingName.AtNutWidth) + 1.6);
-            Point2d headstockPoint4 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d headstockPoint4 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 13.5, -1.1);
-            Point2d headstockPoint5 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d headstockPoint5 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 10, -2);
-            Point2d headstockPoint6 = _invetorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+            Point2d headstockPoint6 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
                 5.2, -0.5);
 
             //Рисуем линию
             SketchLine headstockSketchLine1 = headstockSketch.SketchLines.AddByTwoPoints(headstockPoint0, headstockPoint1);
 
             //Сплайн по управляемым точкам
-            ObjectCollection headstockSketchSplinePointsObjectCollection1 = _invetorConnector.InventorApplication
+            ObjectCollection headstockSketchSplinePointsObjectCollection1 = _inventorConnector.InventorApplication
                 .TransientObjects.CreateObjectCollection();
             headstockSketchSplinePointsObjectCollection1.Add(headstockSketchLine1.EndSketchPoint);
             headstockSketchSplinePointsObjectCollection1.Add(headstockPoint2);
@@ -94,7 +94,7 @@ namespace Parts
                     headstockPoint5);
 
             //Сплайн по управляемым точкам
-            ObjectCollection headstockSketchSplinePointsObjectCollection2 = _invetorConnector.InventorApplication
+            ObjectCollection headstockSketchSplinePointsObjectCollection2 = _inventorConnector.InventorApplication
                 .TransientObjects.CreateObjectCollection();
             headstockSketchSplinePointsObjectCollection2.Add(headstockSketchLine3.EndSketchPoint);
             headstockSketchSplinePointsObjectCollection2.Add(headstockPoint6);
@@ -110,12 +110,11 @@ namespace Parts
             ExtrudeFeature headExtrudeFeature = PartDocumentComponentDefinition.Features.ExtrudeFeatures.Add(headstockExtrudeDefinition);
 
             //Сопряжение1
-            EdgeCollection headstockEdgeCollection1 = _invetorConnector.InventorApplication.TransientObjects.CreateEdgeCollection();
+            EdgeCollection headstockEdgeCollection1 = _inventorConnector.InventorApplication.TransientObjects.CreateEdgeCollection();
             headstockEdgeCollection1.Add(Reversed ? headExtrudeFeature.EndFaces[1].Edges[2] : headExtrudeFeature.StartFaces[1].Edges[2]);
 
             //Сопряжение2
-            EdgeCollection headstockEdgeCollection2 = _invetorConnector.InventorApplication.TransientObjects.CreateEdgeCollection();
-
+            EdgeCollection headstockEdgeCollection2 = _inventorConnector.InventorApplication.TransientObjects.CreateEdgeCollection();
             headstockEdgeCollection2.Add(Reversed ? headExtrudeFeature.EndFaces[1].Edges[5] : headExtrudeFeature.StartFaces[1].Edges[5]);
 
             FilletDefinition headstockFilletDefinition1 = PartDocumentComponentDefinition.Features.FilletFeatures.CreateFilletDefinition();
@@ -143,7 +142,7 @@ namespace Parts
                     materialName = @"Ash";
                     break;
             }
-            _invetorConnector.ChangeMaterial(_partDoc, materialName);
+            _inventorConnector.ChangeMaterial(_partDoc, materialName);
 
             #endregion
         }
