@@ -35,6 +35,8 @@
             this.FingerboardRadiusTextBox = new System.Windows.Forms.TextBox();
             this.FingerboardRadiusLabel = new System.Windows.Forms.Label();
             this.WorkGroupBox = new System.Windows.Forms.GroupBox();
+            this.TunerAngleTextBox = new System.Windows.Forms.TextBox();
+            this.TunerAngleLabel = new System.Windows.Forms.Label();
             this.InlayCheckBox = new System.Windows.Forms.CheckBox();
             this.ReverseHeadstockCheckBox = new System.Windows.Forms.CheckBox();
             this.FingerboardMaterialComboBox = new System.Windows.Forms.ComboBox();
@@ -104,6 +106,8 @@
             // 
             // WorkGroupBox
             // 
+            this.WorkGroupBox.Controls.Add(this.TunerAngleTextBox);
+            this.WorkGroupBox.Controls.Add(this.TunerAngleLabel);
             this.WorkGroupBox.Controls.Add(this.InlayCheckBox);
             this.WorkGroupBox.Controls.Add(this.ReverseHeadstockCheckBox);
             this.WorkGroupBox.Controls.Add(this.FingerboardMaterialComboBox);
@@ -135,10 +139,28 @@
             this.WorkGroupBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.WorkGroupBox.Name = "WorkGroupBox";
             this.WorkGroupBox.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.WorkGroupBox.Size = new System.Drawing.Size(367, 532);
+            this.WorkGroupBox.Size = new System.Drawing.Size(367, 564);
             this.WorkGroupBox.TabIndex = 16;
             this.WorkGroupBox.TabStop = false;
             this.WorkGroupBox.Text = "Работать тут";
+            // 
+            // TunerAngleTextBox
+            // 
+            this.TunerAngleTextBox.Location = new System.Drawing.Point(229, 477);
+            this.TunerAngleTextBox.Name = "TunerAngleTextBox";
+            this.TunerAngleTextBox.Size = new System.Drawing.Size(120, 28);
+            this.TunerAngleTextBox.TabIndex = 30;
+            this.TunerAngleTextBox.Text = "90";
+            this.TunerAngleTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // TunerAngleLabel
+            // 
+            this.TunerAngleLabel.AutoSize = true;
+            this.TunerAngleLabel.Location = new System.Drawing.Point(8, 480);
+            this.TunerAngleLabel.Name = "TunerAngleLabel";
+            this.TunerAngleLabel.Size = new System.Drawing.Size(173, 21);
+            this.TunerAngleLabel.TabIndex = 29;
+            this.TunerAngleLabel.Text = "Угол поворота колков:";
             // 
             // InlayCheckBox
             // 
@@ -179,7 +201,7 @@
             // BuildButton
             // 
             this.BuildButton.AutoSize = true;
-            this.BuildButton.Location = new System.Drawing.Point(113, 491);
+            this.BuildButton.Location = new System.Drawing.Point(109, 525);
             this.BuildButton.Name = "BuildButton";
             this.BuildButton.Size = new System.Drawing.Size(134, 31);
             this.BuildButton.TabIndex = 26;
@@ -375,7 +397,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(393, 560);
+            this.ClientSize = new System.Drawing.Size(393, 592);
             this.Controls.Add(this.WorkGroupBox);
             this.Font = new System.Drawing.Font("Calibri Light", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -422,6 +444,8 @@
         private System.Windows.Forms.TextBox AtNutWidthTextBox;
         private System.Windows.Forms.CheckBox ReverseHeadstockCheckBox;
         private System.Windows.Forms.CheckBox InlayCheckBox;
+        private System.Windows.Forms.TextBox TunerAngleTextBox;
+        private System.Windows.Forms.Label TunerAngleLabel;
     }
 }
 

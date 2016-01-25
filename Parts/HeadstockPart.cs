@@ -54,7 +54,7 @@ namespace Parts
         /// </summary>
         public void Build()
         {
-            #region partCreating
+            #region headstockSketch
             //Создаем скетч на рабочей плоскости XY.
             PlanarSketch headstockSketch = _inventorConnector.MakeNewSketch(3, 0, _partDoc);
 
@@ -123,6 +123,39 @@ namespace Parts
 
             //Примиение сопряжений
             PartDocumentComponentDefinition.Features.FilletFeatures.Add(headstockFilletDefinition1);
+
+            #endregion
+
+            #region tunersHolesSketch
+
+            PlanarSketch tunersHolesSketch = 
+                PartDocumentComponentDefinition.Sketches.Add(PartDocumentComponentDefinition.Features.ExtrudeFeatures[1].EndFaces[1]);
+
+            Point2d tunerPoint1 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(3.5, 3.5);
+            //Point2d tunerPoint2 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(3.5, 4.5);
+            //Point2d tunerPoint3 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(7.5, 2.5);
+            Point2d tunerPoint2 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+                2.2, _settings.GetSetting(SettingName.AtNutWidth) + 1.6);
+            Point2d tunerPoint3 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+                13.5, -1.1);
+
+            SketchCircle tunerCircle = tunersHolesSketch.SketchCircles.AddByCenterRadius(tunerPoint1, 0.35);
+            //SketchLine tunersArrayLine = tunersHolesSketch.SketchLines.AddByTwoPoints(tunerPoint2, tunerPoint3);
+
+            ExtrudeDefinition tunerExtrudeDefinition = PartDocumentComponentDefinition.Features.ExtrudeFeatures
+                .CreateExtrudeDefinition(tunersHolesSketch.Profiles.AddForSolid(), PartFeatureOperationEnum.kCutOperation);
+            tunerExtrudeDefinition.SetDistanceExtent(_settings.GetSetting(SettingName.AtNutHeight),
+                PartFeatureExtentDirectionEnum.kNegativeExtentDirection);
+            ExtrudeFeature tunerExtrudeFeature = PartDocumentComponentDefinition.Features.ExtrudeFeatures.Add(tunerExtrudeDefinition);
+
+            ObjectCollection tunersHolesObjectCollection = _inventorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
+            tunersHolesObjectCollection.Add(tunerExtrudeFeature);
+            PartDocumentComponentDefinition.Features.RectangularPatternFeatures.Add(
+                tunersHolesObjectCollection, 
+                Reversed ? 
+                    PartDocumentComponentDefinition.Features.ExtrudeFeatures[1].StartFaces[1].Edges[4] 
+                    : PartDocumentComponentDefinition.Features.ExtrudeFeatures[1].EndFaces[1].Edges[5],
+                Reversed, 6, 1.5, ComputeType: PatternComputeTypeEnum.kIdenticalCompute);
 
             #endregion
 

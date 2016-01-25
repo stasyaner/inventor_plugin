@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using Inventor;
 using InventorAPI;
@@ -42,7 +44,8 @@ namespace PartsAssembler
                 new FingerboardPart(settings.First(setting => setting.GetType() == typeof (FingerboardSettings)), _inventorConnector),
                 new FretPart(settings.First(setting => setting.GetType() == typeof(FretSettings)), _inventorConnector),
                 new InlayPart(settings.First(setting => setting.GetType() == typeof(InlaySettings)), _inventorConnector),
-                new HeadstockPart(settings.First(setting => setting.GetType() == typeof(HeadstockSettings)), _inventorConnector)
+                new HeadstockPart(settings.First(setting => setting.GetType() == typeof(HeadstockSettings)), _inventorConnector),
+                new TunerPart(settings.First(setting => setting.GetType() == typeof(TunerSettings)), _inventorConnector)
             };
             _assemblyDocument = (AssemblyDocument)inventorConnector.InventorApplication.Documents.Add(
                 DocumentTypeEnum.kAssemblyDocumentObject, inventorConnector.InventorApplication.FileManager.GetTemplateFile(
@@ -133,7 +136,6 @@ namespace PartsAssembler
 
             if (((HeadstockPart)_parts.First(part => part.GetType() == typeof(HeadstockPart))).Reversed)
             {
-                //neckAndHeadstockJointDefinition.FlipAlignmentDirection = true;
                 headstockPartComponentOccurrence.CreateGeometryProxy(
                     ((PartComponentDefinition)headstockPartComponentOccurrence.Definition).Features.ExtrudeFeatures[1].StartFaces[1],
                     out faceProxy);
@@ -186,7 +188,7 @@ namespace PartsAssembler
                 _assemblyDocument.ComponentDefinition.Joints.Add(fingerboardAndInlayJointDefinition);
 
                 //Массив инкрустации
-                ObjectCollection inlayPartParentComponentsObjectCollection = 
+                ObjectCollection inlayPartParentComponentsObjectCollection =
                     _inventorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
                 inlayPartParentComponentsObjectCollection.Add(inlayPartComponentOccurrence);
 
@@ -229,7 +231,7 @@ namespace PartsAssembler
             _assemblyDocument.ComponentDefinition.Joints.Add(fingerboardAndFretJointDefinition);
 
             //Массив инкрустации
-            ObjectCollection fretPartParentComponentsObjectCollection = 
+            ObjectCollection fretPartParentComponentsObjectCollection =
                 _inventorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
             fretPartParentComponentsObjectCollection.Add(fretPartComponentOccurrence);
 
@@ -242,13 +244,101 @@ namespace PartsAssembler
                 fretRectangularPatternFeatureProxy as PartFeature);
 
             #endregion
+
+            #region tunerOccurence
+
+            ComponentOccurrence tunerPartComponentOccurrence = _assemblyDocument.ComponentDefinition.Occurrences.AddByComponentDefinition(
+                (ComponentDefinition)_parts.First(part => part.GetType() == typeof(TunerPart)).PartDocumentComponentDefinition,
+                _inventorConnector.InventorApplication.TransientGeometry.CreateMatrix());
+
+            ComponentOccurrence tunerTopPartComponentOccurrence = _assemblyDocument.ComponentDefinition.Occurrences.Add(
+                @"C:\Users\Станислав\Documents\Visual Studio 2015\Projects\GuitarNeckBuilder\GuitarNeckBuilder\bin\Debug\tuner_top.ipt",
+                _inventorConnector.InventorApplication.TransientGeometry.CreateMatrix());
+
+            tunerPartComponentOccurrence.CreateGeometryProxy(
+                    ((PartComponentDefinition)tunerPartComponentOccurrence.Definition).Features.LoftFeatures[2].EndFace,
+                    out faceProxy);
+
+            GeometryIntent tunerPartIntent1 = _assemblyDocument.ComponentDefinition.CreateGeometryIntent(faceProxy as Face,
+                PointIntentEnum.kPlanarFaceCenterPointIntent);
+
+            tunerTopPartComponentOccurrence.CreateGeometryProxy(
+                    ((PartComponentDefinition)tunerTopPartComponentOccurrence.Definition).Features.ExtrudeFeatures[1].SideFaces[6],
+                    out faceProxy);
+
+            GeometryIntent tunerTopPartIntent = _assemblyDocument.ComponentDefinition.CreateGeometryIntent(faceProxy as Face,
+                PointIntentEnum.kPlanarFaceCenterPointIntent);
+
+            AssemblyJointDefinition tunerAndTunerTopJointDefinition =
+                    _assemblyDocument.ComponentDefinition.Joints.CreateAssemblyJointDefinition(
+                        AssemblyJointTypeEnum.kRotationalJointType, tunerTopPartIntent, tunerPartIntent1);
+            tunerAndTunerTopJointDefinition.FlipOriginDirection = true;
+            tunerAndTunerTopJointDefinition.AngularPosition = Math.PI *
+                ((TunerPart)_parts.First(part => part.GetType() == typeof(TunerPart))).TunerAngle / 180;
+
+            _assemblyDocument.ComponentDefinition.Joints.Add(tunerAndTunerTopJointDefinition);
+
+            headstockPartComponentOccurrence.CreateGeometryProxy(
+                ((HeadstockPart)_parts.First(part => part.GetType() == typeof(HeadstockPart))).Reversed ?
+                    ((PartComponentDefinition)headstockPartComponentOccurrence.Definition).Features.ExtrudeFeatures[2].Faces[1].Edges[2]
+                    : ((PartComponentDefinition)headstockPartComponentOccurrence.Definition).Features.ExtrudeFeatures[2].Faces[1].Edges[1],
+                    out faceProxy);
+
+            GeometryIntent headstockPartIntent2 = _assemblyDocument.ComponentDefinition.CreateGeometryIntent(faceProxy as Edge);
+
+            tunerPartComponentOccurrence.CreateGeometryProxy(
+                    ((PartComponentDefinition)tunerPartComponentOccurrence.Definition).Features.ExtrudeFeatures[2].StartFaces[1],
+                    out faceProxy);
+
+            GeometryIntent tunerPartIntent2 = _assemblyDocument.ComponentDefinition.CreateGeometryIntent(faceProxy as Face,
+                PointIntentEnum.kPlanarFaceCenterPointIntent);
+
+            AssemblyJointDefinition tunerAndHeadstockJointDefinition =
+                    _assemblyDocument.ComponentDefinition.Joints.CreateAssemblyJointDefinition(
+                        AssemblyJointTypeEnum.kRotationalJointType, tunerPartIntent2, headstockPartIntent2);
+            tunerAndHeadstockJointDefinition.FlipOriginDirection = true;
+
+            tunerPartComponentOccurrence.CreateGeometryProxy(
+                    ((PartComponentDefinition)tunerPartComponentOccurrence.Definition).Features.LoftFeatures[2].EndFace,
+                    out faceProxy);
+
+            tunerAndHeadstockJointDefinition.AlignmentOne = faceProxy;
+
+            headstockPartComponentOccurrence.CreateGeometryProxy(
+                ((HeadstockPart)_parts.First(part => part.GetType() == typeof(HeadstockPart))).Reversed ?
+                    ((PartComponentDefinition)headstockPartComponentOccurrence.Definition).Features.ExtrudeFeatures[1].SideFaces[4]
+                    : ((PartComponentDefinition)headstockPartComponentOccurrence.Definition).Features.ExtrudeFeatures[1].SideFaces[3],
+                    out faceProxy);
+
+            tunerAndHeadstockJointDefinition.AlignmentTwo = faceProxy;
+
+            _assemblyDocument.ComponentDefinition.Joints.Add(tunerAndHeadstockJointDefinition);
+
+            ObjectCollection tunerPartParentComponentsObjectCollection =
+                _inventorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
+            tunerPartParentComponentsObjectCollection.Add(tunerPartComponentOccurrence);
+            tunerPartParentComponentsObjectCollection.Add(tunerTopPartComponentOccurrence);
+
+            object tunersHolesRectangularPatternFeatureProxy;
+            headstockPartComponentOccurrence.CreateGeometryProxy(
+                ((PartComponentDefinition)headstockPartComponentOccurrence.Definition).Features.RectangularPatternFeatures[1],
+                out tunersHolesRectangularPatternFeatureProxy);
+
+            _assemblyDocument.ComponentDefinition.OccurrencePatterns.AddFeatureBasedPattern(tunerPartParentComponentsObjectCollection,
+                tunersHolesRectangularPatternFeatureProxy as PartFeature);
+
+            #endregion
         }
 
+        /// <summary>
+        /// Метод постройки всех деталей
+        /// </summary>
         private void BuildParts()
         {
             foreach (var part in _parts)
             {
                 part.Build();
+                Thread.Sleep(1000);
             }
         }
 
@@ -257,7 +347,7 @@ namespace PartsAssembler
         /// </summary>
         public void Close()
         {
-            _assemblyDocument.Close(true);
+            //_assemblyDocument.Close(true);
             foreach (var part in _parts)
             {
                 part.Close();

@@ -14,6 +14,7 @@
         ReverseHeadstock,
         FretWidth,
         FretHeight,
-        Inlay
+        Inlay,
+        TunerAngle
     }
 }

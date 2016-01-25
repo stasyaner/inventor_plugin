@@ -111,6 +111,10 @@ namespace GuitarNeckBuilder.View
                 fretSettings.SetSetting(SettingName.FingerboardRadius, Convert.ToInt32(FingerboardRadiusTextBox.Text));
                 fretSettings.SetSetting(SettingName.AtNutHeight, Convert.ToInt32(AtNutHeightTextBox.Text));
 
+                ISettings tunerSettings = new TunerSettings();
+                tunerSettings.SetSetting(SettingName.TunerAngle, Convert.ToInt32(TunerAngleTextBox.Text));
+                tunerSettings.SetSetting(SettingName.AtNutHeight, Convert.ToInt32(AtNutHeightTextBox.Text));
+
                 #endregion
 
                 _assembler = new Assembler(new List<ISettings>()
@@ -119,7 +123,8 @@ namespace GuitarNeckBuilder.View
                     fingerboardSettings,
                     headstockSettings,
                     inlaySettings,
-                    fretSettings
+                    fretSettings,
+                    tunerSettings
                 }, 
                 inventorConnector);
                 _assembler.Assembly();
