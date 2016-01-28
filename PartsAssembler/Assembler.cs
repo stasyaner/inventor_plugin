@@ -40,12 +40,12 @@ namespace PartsAssembler
             _inventorConnector = inventorConnector;
             _parts = new List<IPart>()
             {
-                new NeckPart(settings.First(setting => setting.GetType() == typeof(NeckSettings)), _inventorConnector),
-                new FingerboardPart(settings.First(setting => setting.GetType() == typeof (FingerboardSettings)), _inventorConnector),
+                new TunerPart(settings.First(setting => setting.GetType() == typeof(TunerSettings)), _inventorConnector),
                 new FretPart(settings.First(setting => setting.GetType() == typeof(FretSettings)), _inventorConnector),
                 new InlayPart(settings.First(setting => setting.GetType() == typeof(InlaySettings)), _inventorConnector),
                 new HeadstockPart(settings.First(setting => setting.GetType() == typeof(HeadstockSettings)), _inventorConnector),
-                new TunerPart(settings.First(setting => setting.GetType() == typeof(TunerSettings)), _inventorConnector)
+                new FingerboardPart(settings.First(setting => setting.GetType() == typeof (FingerboardSettings)), _inventorConnector),
+                new NeckPart(settings.First(setting => setting.GetType() == typeof(NeckSettings)), _inventorConnector),
             };
             _assemblyDocument = (AssemblyDocument)inventorConnector.InventorApplication.Documents.Add(
                 DocumentTypeEnum.kAssemblyDocumentObject, inventorConnector.InventorApplication.FileManager.GetTemplateFile(
@@ -112,7 +112,7 @@ namespace PartsAssembler
             GeometryIntent neckPartIntent2 = _assemblyDocument.ComponentDefinition.CreateGeometryIntent(faceProxy as Face,
                 PointIntentEnum.kPlanarFaceCenterPointIntent);
 
-            if (((HeadstockPart)_parts.First(part => part.GetType() == typeof(HeadstockPart))).Reversed)
+            if (((HeadstockPart)_parts.First(part => part.GetType() == typeof(HeadstockPart))).IsReversed)
             {
                 headstockPartComponentOccurrence.CreateGeometryProxy(
                     ((PartComponentDefinition)headstockPartComponentOccurrence.Definition).Features.ExtrudeFeatures[1].SideFaces[1],
@@ -134,7 +134,7 @@ namespace PartsAssembler
 
             neckAndHeadstockJointDefinition.FlipOriginDirection = true;
 
-            if (((HeadstockPart)_parts.First(part => part.GetType() == typeof(HeadstockPart))).Reversed)
+            if (((HeadstockPart)_parts.First(part => part.GetType() == typeof(HeadstockPart))).IsReversed)
             {
                 headstockPartComponentOccurrence.CreateGeometryProxy(
                     ((PartComponentDefinition)headstockPartComponentOccurrence.Definition).Features.ExtrudeFeatures[1].StartFaces[1],
@@ -160,88 +160,73 @@ namespace PartsAssembler
 
             #region inlayOccurence
 
-            if (((InlayPart)_parts.First(part => part.GetType() == typeof(InlayPart))).Active)
+            if (((InlayPart)_parts.First(part => part.GetType() == typeof(InlayPart))).IsActive)
             {
-                ComponentOccurrence inlayPartComponentOccurrence = _assemblyDocument.ComponentDefinition.Occurrences
-                    .AddByComponentDefinition(
-                        (ComponentDefinition)_parts.First(part => part.GetType() == typeof(InlayPart)).PartDocumentComponentDefinition,
-                        _inventorConnector.InventorApplication.TransientGeometry.CreateMatrix());
+                for (int i = 1; i <= ((FingerboardPart)_parts.First(part => part.GetType() == typeof(FingerboardPart))).FretNumber * 2; i++)
+                {
+                    if (i % 2 != 0) continue;
 
-                inlayPartComponentOccurrence.CreateGeometryProxy(
-                    ((PartComponentDefinition)inlayPartComponentOccurrence.Definition).Features.ExtrudeFeatures[1].StartFaces[1], out faceProxy);
+                    ComponentOccurrence inlayPartComponentOccurrence = _assemblyDocument.ComponentDefinition.Occurrences
+                        .AddByComponentDefinition(
+                            (ComponentDefinition)_parts.First(part => part.GetType() == typeof(InlayPart)).PartDocumentComponentDefinition,
+                            _inventorConnector.InventorApplication.TransientGeometry.CreateMatrix());
 
-                GeometryIntent inlayPartIntent = _assemblyDocument.ComponentDefinition.CreateGeometryIntent(faceProxy as Face,
-                    PointIntentEnum.kPlanarFaceCenterPointIntent);
+                    inlayPartComponentOccurrence.CreateGeometryProxy(
+                        ((PartComponentDefinition)inlayPartComponentOccurrence.Definition).Features.ExtrudeFeatures[1].StartFaces[1],
+                        out faceProxy);
 
-                fingerboardPartComponentOccurrence.CreateGeometryProxy(
-                    ((PartComponentDefinition)fingerboardPartComponentOccurrence.Definition).Features.ExtrudeFeatures[2].StartFaces[1],
-                    out faceProxy);
+                    GeometryIntent inlayPartIntent = _assemblyDocument.ComponentDefinition.CreateGeometryIntent(faceProxy as Face,
+                        PointIntentEnum.kPlanarFaceCenterPointIntent);
 
-                GeometryIntent fingerboardPartIntent2 = _assemblyDocument.ComponentDefinition.CreateGeometryIntent(faceProxy as Face,
-                    PointIntentEnum.kPlanarFaceCenterPointIntent);
+                    fingerboardPartComponentOccurrence.CreateGeometryProxy(
+                        ((PartComponentDefinition)fingerboardPartComponentOccurrence.Definition).Features.ExtrudeFeatures[i].StartFaces[1],
+                        out faceProxy);
 
-                AssemblyJointDefinition fingerboardAndInlayJointDefinition =
-                    _assemblyDocument.ComponentDefinition.Joints.CreateAssemblyJointDefinition(
-                        AssemblyJointTypeEnum.kRigidJointType, fingerboardPartIntent2, inlayPartIntent);
-                fingerboardAndInlayJointDefinition.FlipOriginDirection = true;
+                    GeometryIntent fingerboardPartIntent2 = _assemblyDocument.ComponentDefinition.CreateGeometryIntent(faceProxy as Face,
+                        PointIntentEnum.kPlanarFaceCenterPointIntent);
 
-                _assemblyDocument.ComponentDefinition.Joints.Add(fingerboardAndInlayJointDefinition);
+                    AssemblyJointDefinition fingerboardAndInlayJointDefinition =
+                        _assemblyDocument.ComponentDefinition.Joints.CreateAssemblyJointDefinition(
+                            AssemblyJointTypeEnum.kRigidJointType, fingerboardPartIntent2, inlayPartIntent);
+                    fingerboardAndInlayJointDefinition.FlipOriginDirection = true;
 
-                //Массив инкрустации
-                ObjectCollection inlayPartParentComponentsObjectCollection =
-                    _inventorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
-                inlayPartParentComponentsObjectCollection.Add(inlayPartComponentOccurrence);
-
-                object inlayRectangularPatternFeatureProxy;
-                fingerboardPartComponentOccurrence.CreateGeometryProxy(
-                    ((PartComponentDefinition)fingerboardPartComponentOccurrence.Definition).Features.RectangularPatternFeatures[2],
-                    out inlayRectangularPatternFeatureProxy);
-
-                _assemblyDocument.ComponentDefinition.OccurrencePatterns.AddFeatureBasedPattern(inlayPartParentComponentsObjectCollection,
-                    inlayRectangularPatternFeatureProxy as PartFeature);
+                    _assemblyDocument.ComponentDefinition.Joints.Add(fingerboardAndInlayJointDefinition);
+                }
             }
 
             #endregion
 
             #region fretOccurence
 
-            ComponentOccurrence fretPartComponentOccurrence = _assemblyDocument.ComponentDefinition.Occurrences.AddByComponentDefinition(
-                (ComponentDefinition)_parts.First(part => part.GetType() == typeof(FretPart)).PartDocumentComponentDefinition,
-                _inventorConnector.InventorApplication.TransientGeometry.CreateMatrix());
+            for (int i = 1; i <= ((FingerboardPart)_parts.First(part => part.GetType() == typeof(FingerboardPart))).FretNumber * 2; i++)
+            {
+                if (i % 2 == 0) continue;
 
-            fretPartComponentOccurrence.CreateGeometryProxy(
+                ComponentOccurrence fretPartComponentOccurrence = _assemblyDocument.ComponentDefinition.Occurrences.AddByComponentDefinition(
+                    (ComponentDefinition)_parts.First(part => part.GetType() == typeof(FretPart)).PartDocumentComponentDefinition,
+                    _inventorConnector.InventorApplication.TransientGeometry.CreateMatrix());
+
+                fretPartComponentOccurrence.CreateGeometryProxy(
                     ((PartComponentDefinition)fretPartComponentOccurrence.Definition).Features.ExtrudeFeatures[1].SideFaces[1],
                     out faceProxy);
 
-            GeometryIntent fretPartIntent = _assemblyDocument.ComponentDefinition.CreateGeometryIntent(faceProxy as Face,
-                PointIntentEnum.kPlanarFaceCenterPointIntent);
+                GeometryIntent fretPartIntent = _assemblyDocument.ComponentDefinition.CreateGeometryIntent(faceProxy as Face,
+                    PointIntentEnum.kPlanarFaceCenterPointIntent);
 
-            fingerboardPartComponentOccurrence.CreateGeometryProxy(
-                ((PartComponentDefinition)fingerboardPartComponentOccurrence.Definition).Features.ExtrudeFeatures[1].StartFaces[1],
-                out faceProxy);
+                fingerboardPartComponentOccurrence.CreateGeometryProxy(
+                    ((PartComponentDefinition)fingerboardPartComponentOccurrence.Definition).Features.ExtrudeFeatures[i].StartFaces[1],
+                    out faceProxy);
 
-            GeometryIntent fretPartIntent2 = _assemblyDocument.ComponentDefinition.CreateGeometryIntent(faceProxy as Face,
-                PointIntentEnum.kPlanarFaceCenterPointIntent);
+                GeometryIntent fretPartIntent2 = _assemblyDocument.ComponentDefinition.CreateGeometryIntent(faceProxy as Face,
+                    PointIntentEnum.kPlanarFaceCenterPointIntent);
 
-            AssemblyJointDefinition fingerboardAndFretJointDefinition =
-                _assemblyDocument.ComponentDefinition.Joints.CreateAssemblyJointDefinition(
-                    AssemblyJointTypeEnum.kRigidJointType, fretPartIntent2, fretPartIntent);
-            fingerboardAndFretJointDefinition.FlipOriginDirection = true;
+                AssemblyJointDefinition fingerboardAndFretJointDefinition =
+                    _assemblyDocument.ComponentDefinition.Joints.CreateAssemblyJointDefinition(
+                        AssemblyJointTypeEnum.kRigidJointType, fretPartIntent2, fretPartIntent);
+                fingerboardAndFretJointDefinition.FlipOriginDirection = true;
 
-            _assemblyDocument.ComponentDefinition.Joints.Add(fingerboardAndFretJointDefinition);
-
-            //Массив инкрустации
-            ObjectCollection fretPartParentComponentsObjectCollection =
-                _inventorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
-            fretPartParentComponentsObjectCollection.Add(fretPartComponentOccurrence);
-
-            object fretRectangularPatternFeatureProxy;
-            fingerboardPartComponentOccurrence.CreateGeometryProxy(
-                ((PartComponentDefinition)fingerboardPartComponentOccurrence.Definition).Features.RectangularPatternFeatures[1],
-                out fretRectangularPatternFeatureProxy);
-
-            _assemblyDocument.ComponentDefinition.OccurrencePatterns.AddFeatureBasedPattern(fretPartParentComponentsObjectCollection,
-                fretRectangularPatternFeatureProxy as PartFeature);
+                _assemblyDocument.ComponentDefinition.Joints.Add(fingerboardAndFretJointDefinition);
+            }
 
             #endregion
 
@@ -279,7 +264,7 @@ namespace PartsAssembler
             _assemblyDocument.ComponentDefinition.Joints.Add(tunerAndTunerTopJointDefinition);
 
             headstockPartComponentOccurrence.CreateGeometryProxy(
-                ((HeadstockPart)_parts.First(part => part.GetType() == typeof(HeadstockPart))).Reversed ?
+                ((HeadstockPart)_parts.First(part => part.GetType() == typeof(HeadstockPart))).IsReversed ?
                     ((PartComponentDefinition)headstockPartComponentOccurrence.Definition).Features.ExtrudeFeatures[2].Faces[1].Edges[2]
                     : ((PartComponentDefinition)headstockPartComponentOccurrence.Definition).Features.ExtrudeFeatures[2].Faces[1].Edges[1],
                     out faceProxy);
@@ -305,7 +290,7 @@ namespace PartsAssembler
             tunerAndHeadstockJointDefinition.AlignmentOne = faceProxy;
 
             headstockPartComponentOccurrence.CreateGeometryProxy(
-                ((HeadstockPart)_parts.First(part => part.GetType() == typeof(HeadstockPart))).Reversed ?
+                ((HeadstockPart)_parts.First(part => part.GetType() == typeof(HeadstockPart))).IsReversed ?
                     ((PartComponentDefinition)headstockPartComponentOccurrence.Definition).Features.ExtrudeFeatures[1].SideFaces[4]
                     : ((PartComponentDefinition)headstockPartComponentOccurrence.Definition).Features.ExtrudeFeatures[1].SideFaces[3],
                     out faceProxy);
@@ -338,7 +323,6 @@ namespace PartsAssembler
             foreach (var part in _parts)
             {
                 part.Build();
-                Thread.Sleep(1000);
             }
         }
 
@@ -347,10 +331,10 @@ namespace PartsAssembler
         /// </summary>
         public void Close()
         {
-            //_assemblyDocument.Close(true);
+            _assemblyDocument?.Close(true);
             foreach (var part in _parts)
             {
-                part.Close();
+                part?.Close();
             }
             //_inventorConnector.InventorApplication.Quit();
         }

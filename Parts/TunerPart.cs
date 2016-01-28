@@ -188,22 +188,32 @@ namespace Parts
 
             #region tunerSketch8
 
-            //PlanarSketch tunerTempSketch = 
-            //    PartDocumentComponentDefinition.Sketches.Add(PartDocumentComponentDefinition.Features.LoftFeatures[2].EndFace);
-            //SketchPoint tunerSketch8SketchPoint = tunerTempSketch.SketchPoints.Add(
-            //    _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d());
-            
-            //WorkPlane tunerSketchWorkPlane8 = PartDocumentComponentDefinition.WorkPlanes.AddByPlaneAndPoint(
-            //    PartDocumentComponentDefinition.WorkPlanes[3], tunerSketch8SketchPoint);
-            //tunerSketchWorkPlane8.Visible = false;
-            //tunerTempSketch.Visible = false;
+            PlanarSketch tunerTempSketch =
+                PartDocumentComponentDefinition.Sketches.Add(PartDocumentComponentDefinition.Features.ExtrudeFeatures[3].EndFaces[1]);
+            SketchPoint tunerSketch8SketchPoint = tunerTempSketch.SketchPoints.Add(
+                _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d());
+            tunerTempSketch.Visible = false;
 
-            //PlanarSketch tunerSketch8 =
-            //    PartDocumentComponentDefinition.Sketches.Add(tunerSketchWorkPlane8);
+            WorkPlane tunerSketchTempWorkPlane2 = PartDocumentComponentDefinition.WorkPlanes.AddByPlaneAndPoint(
+                PartDocumentComponentDefinition.WorkPlanes[1], tunerSketch8SketchPoint);
+            tunerSketchTempWorkPlane2.Visible = false;
 
-            //tunerSketch8.SketchLines.AddByTwoPoints(
-            //    _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(),
-            //    _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d()
+            WorkPlane tunerSketchWorkPlane8 = PartDocumentComponentDefinition.WorkPlanes.AddByPlaneAndOffset(
+                tunerSketchTempWorkPlane2, 0.1);
+            tunerSketchWorkPlane8.Visible = false;
+
+            PlanarSketch tunerSketch8 = PartDocumentComponentDefinition.Sketches.Add(tunerSketchWorkPlane8);
+
+            tunerSketch8.SketchCircles.AddByCenterRadius(
+                _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(0, -0.2), 0.03);
+
+            ExtrudeDefinition tunerExtrudeDefinition8 = PartDocumentComponentDefinition.Features.ExtrudeFeatures
+                .CreateExtrudeDefinition(tunerSketch8.Profiles.AddForSolid(), PartFeatureOperationEnum.kCutOperation);
+            ObjectCollection lala = _inventorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
+            lala.Add(PartDocumentComponentDefinition.Features.ExtrudeFeatures[3].SurfaceBody);
+            tunerExtrudeDefinition8.AffectedBodies = lala;
+            tunerExtrudeDefinition8.SetDistanceExtent(0.2, PartFeatureExtentDirectionEnum.kNegativeExtentDirection);
+            ExtrudeFeature tunerExtrudeFeature8 = PartDocumentComponentDefinition.Features.ExtrudeFeatures.Add(tunerExtrudeDefinition8);
 
             #endregion
 

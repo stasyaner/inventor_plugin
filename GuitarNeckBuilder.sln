@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventorAPI", "InventorAPI\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PartsAssembler", "PartsAssembler\PartsAssembler.csproj", "{A36077F1-8D80-45E0-9E8D-831054C85F05}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{7FC56A4D-96CE-4715-B426-44B20FC4AFDF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{A36077F1-8D80-45E0-9E8D-831054C85F05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A36077F1-8D80-45E0-9E8D-831054C85F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A36077F1-8D80-45E0-9E8D-831054C85F05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FC56A4D-96CE-4715-B426-44B20FC4AFDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FC56A4D-96CE-4715-B426-44B20FC4AFDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FC56A4D-96CE-4715-B426-44B20FC4AFDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FC56A4D-96CE-4715-B426-44B20FC4AFDF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

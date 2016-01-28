@@ -32,7 +32,7 @@ namespace Parts
         /// <summary>
         /// Свойство для получения состояния инкрустации (активна/не активна)
         /// </summary>
-        public bool Active => _settings.GetSetting(SettingName.Inlay) == 1;
+        public bool IsActive => _settings.GetSetting(SettingName.Inlay) == 1;
 
         /// <summary>
         /// Конструктор с параметрами
@@ -42,7 +42,7 @@ namespace Parts
         public InlayPart(ISettings settings, InventorConnector inventorConnector)
         {
             _settings = settings;
-            if (Active)
+            if (IsActive)
             {
                 _inventorConnector = inventorConnector;
                 _partDoc = (PartDocument) inventorConnector.InventorApplication.Documents.Add(
@@ -57,7 +57,7 @@ namespace Parts
         /// </summary>
         public void Build()
         {
-            if (Active)
+            if (IsActive)
             {
                 //Создаем скетч на рабочей плоскости ZX.
                 PlanarSketch inlaySketch = _inventorConnector.MakeNewSketch(2, 0, _partDoc);

@@ -23,7 +23,10 @@ namespace Parts
         /// <summary>
         /// Ссылка на описание компонентов документа детали
         /// </summary>
-        public PartComponentDefinition PartDocumentComponentDefinition => _partDoc.ComponentDefinition;
+        public PartComponentDefinition PartDocumentComponentDefinition
+        {
+            get { return _partDoc.ComponentDefinition; }
+        }
 
         /// <summary>
         /// Ссылка на настройки детали

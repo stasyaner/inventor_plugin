@@ -61,12 +61,12 @@ namespace Settings
                 throw new ArgumentException("Словарь не содержит такого ключа.");
             }
 
-            //Делим на 10, так как инвентор воспринимает все размеры в см
             if (settingName == SettingName.Material)
             {
                 return _settingsDictionary[settingName];
             }
 
+            //Делим на 10, так как инвентор воспринимает все размеры в см
             return _settingsDictionary[settingName] / 10.0;
         }
     }

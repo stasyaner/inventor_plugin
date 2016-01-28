@@ -33,7 +33,7 @@ namespace Parts
         /// <summary>
         /// Свойство, отражающее значение параметра "реверсная голова грифа"
         /// </summary>
-        public bool Reversed => _settings.GetSetting(SettingName.ReverseHeadstock) == 1;
+        public bool IsReversed => _settings.GetSetting(SettingName.ReverseHeadstock) == 1;
 
         /// <summary>
         /// Конструктор с параметрами
@@ -111,11 +111,11 @@ namespace Parts
 
             //Сопряжение1
             EdgeCollection headstockEdgeCollection1 = _inventorConnector.InventorApplication.TransientObjects.CreateEdgeCollection();
-            headstockEdgeCollection1.Add(Reversed ? headExtrudeFeature.EndFaces[1].Edges[2] : headExtrudeFeature.StartFaces[1].Edges[2]);
+            headstockEdgeCollection1.Add(IsReversed ? headExtrudeFeature.EndFaces[1].Edges[2] : headExtrudeFeature.StartFaces[1].Edges[2]);
 
             //Сопряжение2
             EdgeCollection headstockEdgeCollection2 = _inventorConnector.InventorApplication.TransientObjects.CreateEdgeCollection();
-            headstockEdgeCollection2.Add(Reversed ? headExtrudeFeature.EndFaces[1].Edges[5] : headExtrudeFeature.StartFaces[1].Edges[5]);
+            headstockEdgeCollection2.Add(IsReversed ? headExtrudeFeature.EndFaces[1].Edges[5] : headExtrudeFeature.StartFaces[1].Edges[5]);
 
             FilletDefinition headstockFilletDefinition1 = PartDocumentComponentDefinition.Features.FilletFeatures.CreateFilletDefinition();
             headstockFilletDefinition1.AddVariableRadiusEdgeSet(headstockEdgeCollection1, 1, 0.3);
@@ -152,10 +152,10 @@ namespace Parts
             tunersHolesObjectCollection.Add(tunerExtrudeFeature);
             PartDocumentComponentDefinition.Features.RectangularPatternFeatures.Add(
                 tunersHolesObjectCollection, 
-                Reversed ? 
+                IsReversed ? 
                     PartDocumentComponentDefinition.Features.ExtrudeFeatures[1].StartFaces[1].Edges[4] 
                     : PartDocumentComponentDefinition.Features.ExtrudeFeatures[1].EndFaces[1].Edges[5],
-                Reversed, 6, 1.5, ComputeType: PatternComputeTypeEnum.kIdenticalCompute);
+                IsReversed, 6, 1.5, ComputeType: PatternComputeTypeEnum.kIdenticalCompute);
 
             #endregion
 

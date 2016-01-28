@@ -171,38 +171,78 @@ namespace Parts
 
             #endregion
 
-            #region fretHoleSketch
+            #region fretAndInlayHoles
 
-            //Создаем скетч на рабочей плоскости ZX.
-            PlanarSketch fretHoleSketch = _inventorConnector.MakeNewSketch(2, 0.15, _partDoc);
+            double currentFretDistance = 0.0;
+            double currentInlayDistance = 0.0;
+            for (int i = 0; i < _settings.GetSetting(SettingName.FretNumber); i++)
+            {
+                #region fretHoles
 
-            // Создаем точки
-            Point2d fretHolePoint1 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
-                _settings.GetSetting(SettingName.AtNutWidth) / -1.5, 1.2);
-            Point2d fretHolePoint2 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
-                _settings.GetSetting(SettingName.AtNutWidth) / 1.5, 1.2);
-            Point2d fretHolePoint3 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
-                _settings.GetSetting(SettingName.AtNutWidth) / 1.5, 1.25);
+                //Создаем скетч на рабочей плоскости ZX.
+                PlanarSketch fretHoleSketch = _inventorConnector.MakeNewSketch(2, 0.15, _partDoc);
 
-            //Рисуем прямоугольник по трем точкам
-            fretHoleSketch.SketchLines.AddAsThreePointRectangle(fretHolePoint1, fretHolePoint2, fretHolePoint3);
+                currentInlayDistance = ((_settings.GetSetting(SettingName.Length) + 11 +
+                    ((22 - _settings.GetSetting(SettingName.FretNumber)) * 0.55) -
+                    currentFretDistance) / 17.817 / 2) + currentFretDistance;
 
-            //Выдавливаем прямоугольник
-            ExtrudeDefinition fretHoleExtrudeDef = PartDocumentComponentDefinition.Features.ExtrudeFeatures
-                .CreateExtrudeDefinition(fretHoleSketch.Profiles.AddForSolid(), PartFeatureOperationEnum.kCutOperation);
-            fretHoleExtrudeDef.SetDistanceExtent(0.2, PartFeatureExtentDirectionEnum.kPositiveExtentDirection);
-            PartDocumentComponentDefinition.Features.ExtrudeFeatures.Add(fretHoleExtrudeDef);
+                currentFretDistance = (_settings.GetSetting(SettingName.Length) + 11 + 
+                    ((22 - _settings.GetSetting(SettingName.FretNumber)) * 0.55) - currentFretDistance) / 17.817 
+                    + currentFretDistance;
 
-            //Прямоугольный массив выдавленных прямоугольников
-            ObjectCollection fretHoleObjectCollection = _inventorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
-            fretHoleObjectCollection.Add(PartDocumentComponentDefinition.Features.ExtrudeFeatures[1]);
-            PartDocumentComponentDefinition.Features.RectangularPatternFeatures.Add(
-                fretHoleObjectCollection, PartDocumentComponentDefinition.WorkAxes[3],
-                true,
-                _settings.GetSetting(SettingName.FretNumber),
-                //Умножаем на 1.0, чтобы был double
-                _settings.GetSetting(SettingName.Length) * 1.0 / _settings.GetSetting(SettingName.FretNumber),
-                ComputeType: PatternComputeTypeEnum.kIdenticalCompute);
+                // Создаем точки
+                Point2d fretHolePoint1 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+                    0, currentFretDistance);
+                Point2d fretHolePoint2 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+                    _settings.GetSetting(SettingName.AtNutWidth) / 1.5, currentFretDistance + 0.025);
+
+                //Рисуем прямоугольник по трем точкам
+                fretHoleSketch.SketchLines.AddAsTwoPointCenteredRectangle(fretHolePoint1, fretHolePoint2);
+
+                //Выдавливаем прямоугольник
+                ExtrudeDefinition fretHoleExtrudeDef = PartDocumentComponentDefinition.Features.ExtrudeFeatures
+                    .CreateExtrudeDefinition(fretHoleSketch.Profiles.AddForSolid(), PartFeatureOperationEnum.kCutOperation);
+                fretHoleExtrudeDef.SetDistanceExtent(0.2, PartFeatureExtentDirectionEnum.kPositiveExtentDirection);
+                PartDocumentComponentDefinition.Features.ExtrudeFeatures.Add(fretHoleExtrudeDef);
+
+                #endregion
+
+                #region inlay 
+
+                if (Math.Abs(_settings.GetSetting(SettingName.Inlay)) > 0)
+                {
+                    //Создаем скетч на рабочей плоскости ZX.
+                    PlanarSketch inlaySketch = _inventorConnector.MakeNewSketch(2, 0.15, _partDoc);
+
+                    // Создаем точки
+                    Point2d inlayPoint1 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+                        0, currentInlayDistance);
+                    Point2d inlayPoint2 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+                        0.1, currentInlayDistance + 0.1);
+
+                    //Рисуем прямоугольник по трем точкам
+                    inlaySketch.SketchLines.AddAsTwoPointCenteredRectangle(inlayPoint1, inlayPoint2);
+
+                    //Выдавливаем прямоугольник
+                    ExtrudeDefinition inlayExtrudeDef = PartDocumentComponentDefinition.Features.ExtrudeFeatures
+                        .CreateExtrudeDefinition(inlaySketch.Profiles.AddForSolid(), PartFeatureOperationEnum.kCutOperation);
+                    inlayExtrudeDef.SetDistanceExtent(0.2, PartFeatureExtentDirectionEnum.kPositiveExtentDirection);
+                    PartDocumentComponentDefinition.Features.ExtrudeFeatures.Add(inlayExtrudeDef);
+                }
+
+                #endregion
+            }
+
+            ////Прямоугольный массив выдавленных прямоугольников
+            //ObjectCollection fretHoleObjectCollection = _inventorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
+            //fretHoleObjectCollection.Add(PartDocumentComponentDefinition.Features.ExtrudeFeatures[1]);
+            //PartDocumentComponentDefinition.Features.RectangularPatternFeatures.Add(
+            //    fretHoleObjectCollection, PartDocumentComponentDefinition.WorkAxes[3],
+            //    true,
+            //    _settings.GetSetting(SettingName.FretNumber),
+            //    //Умножаем на 1.0, чтобы был double
+            //    _settings.GetSetting(SettingName.Length) * 1.0 / _settings.GetSetting(SettingName.FretNumber),
+            //    ComputeType: PatternComputeTypeEnum.kIdenticalCompute);
 
             #endregion
 
@@ -210,36 +250,36 @@ namespace Parts
 
             if (Math.Abs(_settings.GetSetting(SettingName.Inlay)) > 0)
             {
-                //Создаем скетч на рабочей плоскости ZX.
-                PlanarSketch inlaySketch = _inventorConnector.MakeNewSketch(2, 0.15, _partDoc);
+                    ////Создаем скетч на рабочей плоскости ZX.
+                    //PlanarSketch inlaySketch = _inventorConnector.MakeNewSketch(2, 0.15, _partDoc);
 
-                // Создаем точки
-                Point2d inlayPoint1 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
-                    0, 0.6);
-                Point2d inlayPoint2 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
-                    0.1, 0.7);
+                    //// Создаем точки
+                    //Point2d inlayPoint1 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+                    //    0, 0.6);
+                    //Point2d inlayPoint2 = _inventorConnector.InventorApplication.TransientGeometry.CreatePoint2d(
+                    //    0.1, 0.7);
 
-                //Рисуем прямоугольник по трем точкам
-                inlaySketch.SketchLines.AddAsTwoPointCenteredRectangle(inlayPoint1, inlayPoint2);
+                    ////Рисуем прямоугольник по трем точкам
+                    //inlaySketch.SketchLines.AddAsTwoPointCenteredRectangle(inlayPoint1, inlayPoint2);
 
-                //Выдавливаем прямоугольник
-                ExtrudeDefinition inlayExtrudeDef = PartDocumentComponentDefinition.Features.ExtrudeFeatures
-                    .CreateExtrudeDefinition(inlaySketch.Profiles.AddForSolid(), PartFeatureOperationEnum.kCutOperation);
-                inlayExtrudeDef.SetDistanceExtent(0.2, PartFeatureExtentDirectionEnum.kPositiveExtentDirection);
-                PartDocumentComponentDefinition.Features.ExtrudeFeatures.Add(inlayExtrudeDef);
+                    ////Выдавливаем прямоугольник
+                    //ExtrudeDefinition inlayExtrudeDef = PartDocumentComponentDefinition.Features.ExtrudeFeatures
+                    //    .CreateExtrudeDefinition(inlaySketch.Profiles.AddForSolid(), PartFeatureOperationEnum.kCutOperation);
+                    //inlayExtrudeDef.SetDistanceExtent(0.2, PartFeatureExtentDirectionEnum.kPositiveExtentDirection);
+                    //PartDocumentComponentDefinition.Features.ExtrudeFeatures.Add(inlayExtrudeDef);
+                }
 
-                //Прямоугольный массив выдавленных прямоугольников
-                ObjectCollection inlayObjectCollection =
-                    _inventorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
-                inlayObjectCollection.Add(PartDocumentComponentDefinition.Features.ExtrudeFeatures[2]);
-                PartDocumentComponentDefinition.Features.RectangularPatternFeatures.Add(
-                    inlayObjectCollection, PartDocumentComponentDefinition.WorkAxes[3],
-                    true,
-                    _settings.GetSetting(SettingName.FretNumber),
-                    //Умножаем на 1.0, чтобы был double
-                    _settings.GetSetting(SettingName.Length) * 1.0 / _settings.GetSetting(SettingName.FretNumber),
-                    ComputeType: PatternComputeTypeEnum.kIdenticalCompute);
-            }
+                ////Прямоугольный массив выдавленных прямоугольников
+                //ObjectCollection inlayObjectCollection =
+                //    _inventorConnector.InventorApplication.TransientObjects.CreateObjectCollection();
+                //inlayObjectCollection.Add(PartDocumentComponentDefinition.Features.ExtrudeFeatures[2]);
+                //PartDocumentComponentDefinition.Features.RectangularPatternFeatures.Add(
+                //    inlayObjectCollection, PartDocumentComponentDefinition.WorkAxes[3],
+                //    true,
+                //    _settings.GetSetting(SettingName.FretNumber),
+                //    //Умножаем на 1.0, чтобы был double
+                //    _settings.GetSetting(SettingName.Length) * 1.0 / _settings.GetSetting(SettingName.FretNumber),
+                //    ComputeType: PatternComputeTypeEnum.kIdenticalCompute);
 
             #endregion
             
